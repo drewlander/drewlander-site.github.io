@@ -41,7 +41,7 @@ For fedora 21, (I do not recall off the top of my head) but these are the packag
 {% highlight bash %}
 mariadb-devel
 openssl-devel
-{% endhighlight}
+{% endhighlight %}
 The nice thing too is that when I did a yum -y remove postfix, it left my main.cf intact, just saved it as main.cf.rpmsave. So before starting postfix don't foget to do:
 {% highlight bash %}
 cp /etc/postfix/main.cf.rpmsave /etc/postfix/main.cf
