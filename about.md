@@ -3,9 +3,17 @@ layout: page
 title: About
 permalink: /about/
 ---
+Drewski is a devops dood. Items worked on (meaining I am still familiar with) include:
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
-
-You can find the source code for the Jekyll new theme at: [github.com/jglovier/jekyll-new](https://github.com/jglovier/jekyll-new)
-
-You can find the source code for Jekyll at [github.com/jekyll/jekyll](https://github.com/jekyll/jekyll)
+*  FreeBSD
+* Linux (about any distro you can name. Anyone remember YOPER?)
+* apache/nginx/haproxy
+* Microsoft Mediaroom
+* Windows Server 2003/2008/2012
+* Active Directory/FreeIPA (Very familiart with Kerberos,LDAP,Samba)
+* postfix
+* chef
+* bind/nsd
+* C#/php/python/bash/powershell/C++
+* iptables/pf
+* a ton of other stuff that I don't feel like taking the time to name 
