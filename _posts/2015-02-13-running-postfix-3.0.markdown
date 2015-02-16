@@ -16,7 +16,11 @@ I put the following in a file so I could keep building it until I got all the ri
 {% highlight bash %}
 make tidy
 #This builds postfix with mysql+tls+sasl support
-make -f Makefile.init makefiles 'CCARGS=-DHAS_MYSQL -I/usr/include/mysql  -DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\"dovecot\" -DUSE_TLS `pkg-config --cflags openssl`'   'AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm' 'AUXLIBS=-L/usr/lib64 -lssl -lcrypto'  shared=yes dynamicmaps=yes
+make -f Makefile.init makefiles 'CCARGS=-DHAS_MYSQL -I/usr/include/mysql  \
+-DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\"dovecot\" \
+-DUSE_TLS `pkg-config --cflags openssl`'   \
+'AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm' \
+'AUXLIBS=-L/usr/lib64 -lssl -lcrypto'  shared=yes dynamicmaps=yes
 make
 make install
 {% endhighlight %}

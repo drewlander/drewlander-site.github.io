@@ -20,7 +20,7 @@
 
   <div class="wrapper">
 
-    <a class="site-title" href="/"></a>
+    <a class="site-title" href="/">Drewskiwooskie Blogarooskie</a>
 
     <nav class="site-nav">
       <a href="#" class="menu-icon">
@@ -35,6 +35,8 @@
         
           
           <a class="page-link" href="/about/">About</a>
+          
+        
           
         
           
@@ -72,7 +74,11 @@ tar -xzvf postfix-3.0.0.tar.gz
 
 <div class="highlight"><pre><code class="language-bash" data-lang="bash">make tidy
 <span class="c">#This builds postfix with mysql+tls+sasl support</span>
-make -f Makefile.init makefiles <span class="s1">&#39;CCARGS=-DHAS_MYSQL -I/usr/include/mysql  -DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\&quot;dovecot\&quot; -DUSE_TLS `pkg-config --cflags openssl`&#39;</span>   <span class="s1">&#39;AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm&#39;</span> <span class="s1">&#39;AUXLIBS=-L/usr/lib64 -lssl -lcrypto&#39;</span>  <span class="nv">shared</span><span class="o">=</span>yes <span class="nv">dynamicmaps</span><span class="o">=</span>yes
+make -f Makefile.init makefiles <span class="s1">&#39;CCARGS=-DHAS_MYSQL -I/usr/include/mysql  \</span>
+<span class="s1">-DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\&quot;dovecot\&quot; \</span>
+<span class="s1">-DUSE_TLS `pkg-config --cflags openssl`&#39;</span>   <span class="se">\</span>
+<span class="s1">&#39;AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm&#39;</span> <span class="se">\</span>
+<span class="s1">&#39;AUXLIBS=-L/usr/lib64 -lssl -lcrypto&#39;</span>  <span class="nv">shared</span><span class="o">=</span>yes <span class="nv">dynamicmaps</span><span class="o">=</span>yes
 make
 make install</code></pre></div>
 
@@ -91,6 +97,18 @@ Escape character is <span class="s1">&#39;^]&#39;</span>.
 telnet&gt; <span class="nb">set </span>crlf
 Will send carriage returns as telnet &lt;CR&gt;&lt;LF&gt;.</code></pre></div>
 
+<p>For fedora 21, (I do not recall off the top of my head) but these are the packages you need to build with mysql+tls:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">mariadb-devel
+openssl-devel</code></pre></div>
+
+<p>The nice thing too is that when I did a yum -y remove postfix, it left my main.cf intact, just saved it as main.cf.rpmsave. So before starting postfix don’t foget to do:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">cp /etc/postfix/main.cf.rpmsave /etc/postfix/main.cf</code></pre></div>
+
+<p>Also, I left backwards compatability on with postfix, have not tried turning it off. When I do, I will take note of what I had and what needed to be changed.</p>
+
+<p>No idea how to do comments yet, so email <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#100;&#114;&#101;&#119;&#115;&#107;&#105;&#064;&#100;&#114;&#101;&#119;&#115;&#116;&#117;&#100;&#046;&#099;&#111;&#109;">&#100;&#114;&#101;&#119;&#115;&#107;&#105;&#064;&#100;&#114;&#101;&#119;&#115;&#116;&#117;&#100;&#046;&#099;&#111;&#109;</a> with comments/questions</p>
 
   </article>
 
@@ -103,12 +121,12 @@ Will send carriage returns as telnet &lt;CR&gt;&lt;LF&gt;.</code></pre></div>
 
   <div class="wrapper">
 
-    <h2 class="footer-heading"></h2>
+    <h2 class="footer-heading">Drewskiwooskie Blogarooskie</h2>
 
     <div class="footer-col-wrapper">
       <div class="footer-col  footer-col-1">
         <ul class="contact-list">
-          <li></li>
+          <li>Drewskiwooskie Blogarooskie</li>
           <li><a href="mailto:"></a></li>
         </ul>
       </div>

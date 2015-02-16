@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title></title>
+    <title>Drewskiwooskie Blogarooskie</title>
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 13 Feb 2015 08:21:55 -0500</pubDate>
-    <lastBuildDate>Fri, 13 Feb 2015 08:21:55 -0500</lastBuildDate>
+    <pubDate>Mon, 16 Feb 2015 09:33:28 -0500</pubDate>
+    <lastBuildDate>Mon, 16 Feb 2015 09:33:28 -0500</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -22,7 +22,11 @@ tar -xzvf postfix-3.0.0.tar.gz
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;make tidy
 &lt;span class=&quot;c&quot;&gt;#This builds postfix with mysql+tls+sasl support&lt;/span&gt;
-make -f Makefile.init makefiles &lt;span class=&quot;s1&quot;&gt;&amp;#39;CCARGS=-DHAS_MYSQL -I/usr/include/mysql  -DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\&amp;quot;dovecot\&amp;quot; -DUSE_TLS `pkg-config --cflags openssl`&amp;#39;&lt;/span&gt;   &lt;span class=&quot;s1&quot;&gt;&amp;#39;AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;AUXLIBS=-L/usr/lib64 -lssl -lcrypto&amp;#39;&lt;/span&gt;  &lt;span class=&quot;nv&quot;&gt;shared&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yes &lt;span class=&quot;nv&quot;&gt;dynamicmaps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yes
+make -f Makefile.init makefiles &lt;span class=&quot;s1&quot;&gt;&amp;#39;CCARGS=-DHAS_MYSQL -I/usr/include/mysql  \&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;-DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\&amp;quot;dovecot\&amp;quot; \&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;-DUSE_TLS `pkg-config --cflags openssl`&amp;#39;&lt;/span&gt;   &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;&amp;#39;AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm&amp;#39;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;&amp;#39;AUXLIBS=-L/usr/lib64 -lssl -lcrypto&amp;#39;&lt;/span&gt;  &lt;span class=&quot;nv&quot;&gt;shared&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yes &lt;span class=&quot;nv&quot;&gt;dynamicmaps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yes
 make
 make install&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
@@ -41,6 +45,18 @@ Escape character is &lt;span class=&quot;s1&quot;&gt;&amp;#39;^]&amp;#39;&lt;/sp
 telnet&amp;gt; &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;crlf
 Will send carriage returns as telnet &amp;lt;CR&amp;gt;&amp;lt;LF&amp;gt;.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
+&lt;p&gt;For fedora 21, (I do not recall off the top of my head) but these are the packages you need to build with mysql+tls:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;mariadb-devel
+openssl-devel&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The nice thing too is that when I did a yum -y remove postfix, it left my main.cf intact, just saved it as main.cf.rpmsave. So before starting postfix don’t foget to do:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;cp /etc/postfix/main.cf.rpmsave /etc/postfix/main.cf&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Also, I left backwards compatability on with postfix, have not tried turning it off. When I do, I will take note of what I had and what needed to be changed.&lt;/p&gt;
+
+&lt;p&gt;No idea how to do comments yet, so email &lt;a href=&quot;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#116;&amp;#111;:&amp;#100;&amp;#114;&amp;#101;&amp;#119;&amp;#115;&amp;#107;&amp;#105;&amp;#064;&amp;#100;&amp;#114;&amp;#101;&amp;#119;&amp;#115;&amp;#116;&amp;#117;&amp;#100;&amp;#046;&amp;#099;&amp;#111;&amp;#109;&quot;&gt;&amp;#100;&amp;#114;&amp;#101;&amp;#119;&amp;#115;&amp;#107;&amp;#105;&amp;#064;&amp;#100;&amp;#114;&amp;#101;&amp;#119;&amp;#115;&amp;#116;&amp;#117;&amp;#100;&amp;#046;&amp;#099;&amp;#111;&amp;#109;&lt;/a&gt; with comments/questions&lt;/p&gt;
 </description>
         <pubDate>Fri, 13 Feb 2015 02:35:48 -0500</pubDate>
         <link>/postfix/fedora/new/2015/02/13/running-postfix-3.0.html</link>
