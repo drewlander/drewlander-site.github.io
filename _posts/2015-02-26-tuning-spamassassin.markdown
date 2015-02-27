@@ -27,6 +27,9 @@ Vipul's Razor. Assuming in a folder that is full of spam:
 {% highlight bash %}
 for i in `ls`; do spamassassin -r < $i; done
 {% endhighlight %}
+[This](http://wiki.apache.org/spamassassin/report_spam.pl) perl script can be run as a cron job. Just Point it to a folder that contains only spam.
+
+
 Ensuring you are doing sa-update frequently, as well as the above, will help spamassassin properly identify spam/ham. 
 I am personally just tagging the subject, and putting anything with that tag in the subject into a folder that is
 just spam, and running the above commands. This, in addition to running postscreen and a few select rbls, has slowed any spam making it
