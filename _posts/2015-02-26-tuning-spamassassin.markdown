@@ -27,7 +27,7 @@ Vipul's Razor. Assuming in a folder that is full of spam:
 {% highlight bash %}
 for i in `ls`; do spamassassin -r < $i; done
 {% endhighlight %}
-[This](http://wiki.apache.org/spamassassin/report_spam.pl) perl script can be run as a cron job. Just Point it to a folder that contains only spam.
+[This](http://wiki.apache.org/spamassassin/report_spam.pl) perl script can be run as a cron job. Just point it to a folder that contains only spam.
 
 
 Ensuring you are doing sa-update frequently, as well as the above, will help spamassassin properly identify spam/ham. 
