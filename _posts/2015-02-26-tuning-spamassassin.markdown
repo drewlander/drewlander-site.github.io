@@ -16,7 +16,7 @@ easy. The quick and easy way is with sa-learn.
 {% highlight bash %}
 sa-learn --ham --username=vscan  --nosync /path/to/maildir/directory/cur
 sa-learn --sync
-sa-learn --spam --nosync --username=vscan /path/to/maildir/directory/.Junk
+sa-learn --spam --nosync --username=vscan /path/to/maildir/directory/.Junk/cur
 sa-learn --sync
 {% endhighlight %}
 You MUST train both ham and spam to be effective.  I have to use the vscan user, as I run amavis. sa-learn will add the bayesian 
