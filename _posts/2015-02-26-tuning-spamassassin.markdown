@@ -32,5 +32,5 @@ I am personally just tagging the subject, and putting anything with that tag in 
 just spam, and running the above commands. This, in addition to running postscreen and a few select rbls, has slowed any spam making it
 to my inbox to a trickle. 
 
-Excellent reference: (http://www.spamtips.org/p/ultimate-setup-guide.html)[http://www.spamtips.org/p/ultimate-setup-guide.html]
+Excellent reference: [http://www.spamtips.org/p/ultimate-setup-guide.html](http://www.spamtips.org/p/ultimate-setup-guide.html)
 
