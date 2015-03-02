@@ -5,7 +5,6 @@ date:   2015-02-13 7:35:48
 categories: postfix fedora new telnet postrix3
 ---
 Postfix 3.0 stable was released a few days ago (Feb 8). I run a few personal mailservers and decided it would be good if I were to upgrade the one running on Fedora21 (postfix + mysql + spamass-milter + greylisting), This would be a deviation as I would be compling it from source, and who knows what would break with 3.0! Here is a very brief update to what I did to get it working on Fedora 21:
-
 {% highlight bash %}
 yum remove postfix -y
 wget ftp://postfix.mirrors.pair.com/postfix-release/official/postfix-3.0.0.tar.gz
