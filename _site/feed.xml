@@ -5,9 +5,152 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 16 Feb 2015 10:01:23 -0500</pubDate>
-    <lastBuildDate>Mon, 16 Feb 2015 10:01:23 -0500</lastBuildDate>
+    <pubDate>Tue, 12 May 2015 19:28:59 +0000</pubDate>
+    <lastBuildDate>Tue, 12 May 2015 19:28:59 +0000</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>Centos 7 and systemd-nspawn</title>
+        <description>&lt;p&gt;With systemd, comes systemd-nspawn. (I will not talk about love/hate of systemd, not in this post at least. Let’s just say
+if you start out saying you are writing an init system, why does your init system takeover acpi?). Anyway, part of the systemd
+monstrosity is something called nspawn. In short, its a “more powerful” chroot, but still should not be relied upon soley for security
+(think defense in depth people!). Why would you use this over lxc? If you just want to run something in a chroot, its great for it.
+If you need a full container, lxc is probably a better choice. Because I like to try new things, I chose systemd-nspawn to run certain
+applications (http, mysql, minecraft). I also did not see many tutorials specifically targeting centos 7 which seems to be using
+and older verson of systemd-nspawn/machinectl so some features are missing in those tools.&lt;/p&gt;
+
+&lt;h3&gt; Create a basic centos 7 bootstrap&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;yum -y --releasever&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;7&lt;/span&gt; --nogpg --installroot&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/srv/yaystuff install systemd passwd yum fedora-release vim-minimal&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This will install a basic bootstrap centos 7 environment&lt;/p&gt;
+&lt;h3&gt; Reset the password in the container &lt;/h3&gt;
+&lt;p&gt;If you are a good person, you are running selinux in enforcing mode. However there is a known bug in centos 7 that will not
+let you change the password if you “boot” your container. So currently, you can be fancy and make modules, or be only a slightly
+bad person and disable selinux, change the password, re-enable (things work fine after this point with selinux enabled)&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;setenforce 0
+systemd-nspawn -D /srv/yaystuff
+passwd
+&lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;
+setenforce 1&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt; Boot your container and install your fancypants stuff&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;systemd-nspawn -D /srv/yaystuff/ -b&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This will drop you into a shell, where you can yum install/configure to your hearts desire.&lt;/p&gt;
+
+&lt;p&gt;Note: This will also by default make your “container” listen on your network interfaces. So if you have port 80
+open in your firewall, and have httpd started and listening in your container (but not on your host), it will be as if you
+are serving httpd on your host.&lt;/p&gt;
+
+&lt;p&gt;When you are done installing fancy stuff, I just issue&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;halt&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And it stops the container and takes you out of your chroot.&lt;/p&gt;
+
+&lt;p&gt;You can also bind paths outside of your container into the container’s chroot&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;systemd-nspawn -D /srv/yaystuff/ -b --bind&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/path/on/host:/path/in/container&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt;Start your container with systemd &lt;/h3&gt;
+&lt;p&gt;edit the following file: /etc/systemd/system/yaystuff.service&lt;/p&gt;
+&lt;pre&gt;
+[Unit]
+Description=yaystuff container
+
+[Service]
+ExecStart=/usr/bin/systemd-nspawn -jbD /srv/yaystuff/ -bind=/path/on/host:/path/in/container
+KillMode=process
+&lt;/pre&gt;
+&lt;p&gt;Then reload systemd and start the container&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;systemd start yaystuff.service&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now the version of machinectl on centos 7.0 does not have a login feature. So you have to use nsenter. To use nsenter, you have to get the pid of your container. 
+That is logged in /var/log/messages (or if you started your container from the cli)&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;grep -A &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Spawning namespace container on /srv/yaystuff&amp;quot;&lt;/span&gt; /var/log/messages&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Grab the pid there and then execute:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;nsenter -m -u -i -n -p -t &lt;span class=&quot;nv&quot;&gt;$PID&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To leave just type exit.&lt;/p&gt;
+
+&lt;p&gt;Excellent reference: &lt;a href=&quot;http://0pointer.de/blog/projects/changing-roots.html&quot;&gt;http://0pointer.de/blog/projects/changing-roots.html&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sat, 18 Apr 2015 08:00:48 +0000</pubDate>
+        <link>/centos/systemd/nspawn/systemd-nspawn/centos7/containers/2015/04/18/systemd-nspawn-centos-7.html</link>
+        <guid isPermaLink="true">/centos/systemd/nspawn/systemd-nspawn/centos7/containers/2015/04/18/systemd-nspawn-centos-7.html</guid>
+        
+        
+        <category>centos</category>
+        
+        <category>systemd</category>
+        
+        <category>nspawn</category>
+        
+        <category>systemd-nspawn</category>
+        
+        <category>centos7</category>
+        
+        <category>containers</category>
+        
+      </item>
+    
+      <item>
+        <title>Tuning Spamassassin</title>
+        <description>&lt;p&gt;For those of us who are not large companies where paying another company for spam protection is an option, combatting spam
+can be something both fun, and annoying. Hopefully, for any newbies, here are some things
+to do that can greatly reduce the amount of spam you receive, as well as minimize
+the amount of false positives of mail identified as spam.&lt;/p&gt;
+
+&lt;h3&gt; Have spamassassin learn ham and spam &lt;/h3&gt;
+&lt;p&gt;Many people I have seen just install spamassassin, run sa-update, then complain 
+that they are getting a ton of spam. Spamassassin needs tuned, and tuning is quite
+easy. The quick and easy way is with sa-learn.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sa-learn --ham --username&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;vscan  --nosync /path/to/maildir/directory/cur
+sa-learn --sync
+sa-learn --spam --nosync --username&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;vscan /path/to/maildir/directory/.Junk/cur
+sa-learn --sync&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You MUST train both ham and spam to be effective.  I have to use the vscan user, as I run amavis. sa-learn will add the bayesian 
+tokens to the datbase of the user executing spamassassin.&lt;/p&gt;
+
+&lt;p&gt;A nice thing to do is to report mail that you have found to be spam. If you have installed the Razmor moudle, it can be reported to 
+Vipul’s Razor. Assuming in a folder that is full of spam:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; i in &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;ls&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; spamassassin -r &amp;lt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://wiki.apache.org/spamassassin/report_spam.pl&quot;&gt;This&lt;/a&gt; perl script can be run as a cron job. Just point it to a folder that contains only spam.&lt;/p&gt;
+
+&lt;p&gt;Ensuring you are doing sa-update frequently, as well as the above, will help spamassassin properly identify spam/ham. 
+I am personally just tagging the subject, and putting anything with that tag in the subject into a folder that is
+just spam, and running the above commands. This, in addition to running postscreen and a few select rbls, has slowed any spam making it
+to my inbox to a trickle.&lt;/p&gt;
+
+&lt;p&gt;Excellent reference: &lt;a href=&quot;http://www.spamtips.org/p/ultimate-setup-guide.html&quot;&gt;http://www.spamtips.org/p/ultimate-setup-guide.html&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 13 Feb 2015 07:35:48 +0000</pubDate>
+        <link>/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html</link>
+        <guid isPermaLink="true">/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html</guid>
+        
+        
+        <category>postfix</category>
+        
+        <category>fedora</category>
+        
+        <category>spam</category>
+        
+        <category>spamassassin</category>
+        
+      </item>
     
       <item>
         <title>Running postfix 3.0</title>
@@ -18,15 +161,17 @@ wget ftp://postfix.mirrors.pair.com/postfix-release/official/postfix-3.0.0.tar.g
 tar -xzvf postfix-3.0.0.tar.gz
 &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;postfix-3.0.0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;yum -y install mysql-devel openssl-devel libdb-devel libgsasl-devel
+yum groupinstall -y &lt;span class=&quot;s2&quot;&gt;&amp;quot;Development Tools&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;I put the following in a file so I could keep building it until I got all the right libs/deps&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;make tidy
 &lt;span class=&quot;c&quot;&gt;#This builds postfix with mysql+tls+sasl support&lt;/span&gt;
-make -f Makefile.init makefiles &lt;span class=&quot;s1&quot;&gt;&amp;#39;CCARGS=-DHAS_MYSQL -I/usr/include/mysql  \&lt;/span&gt;
-&lt;span class=&quot;s1&quot;&gt;-DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\&amp;quot;dovecot\&amp;quot; \&lt;/span&gt;
-&lt;span class=&quot;s1&quot;&gt;-DUSE_TLS `pkg-config --cflags openssl`&amp;#39;&lt;/span&gt;   &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-&lt;span class=&quot;s1&quot;&gt;&amp;#39;AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm&amp;#39;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-&lt;span class=&quot;s1&quot;&gt;&amp;#39;AUXLIBS=-L/usr/lib64 -lssl -lcrypto&amp;#39;&lt;/span&gt;  &lt;span class=&quot;nv&quot;&gt;shared&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yes &lt;span class=&quot;nv&quot;&gt;dynamicmaps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yes
+make -f Makefile.init makefiles &lt;span class=&quot;s1&quot;&gt;&amp;#39;CCARGS=-DHAS_MYSQL -I/usr/include/mysql\&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;-DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\&amp;quot;dovecot\&amp;quot;\&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;-DUSE_TLS `pkg-config --cflags openssl`&amp;#39;&lt;/span&gt;  &lt;span class=&quot;s1&quot;&gt;&amp;#39;AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;AUXLIBS=-L/usr/lib64\&lt;/span&gt;
+&lt;span class=&quot;s1&quot;&gt;-lssl -lcrypto&amp;#39;&lt;/span&gt;  &lt;span class=&quot;nv&quot;&gt;shared&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yes &lt;span class=&quot;nv&quot;&gt;dynamicmaps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yes
 make
 make install&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
@@ -58,9 +203,9 @@ openssl-devel&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;No idea how to do comments yet, so email &lt;a href=&quot;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#116;&amp;#111;:&amp;#100;&amp;#114;&amp;#101;&amp;#119;&amp;#115;&amp;#107;&amp;#105;&amp;#064;&amp;#100;&amp;#114;&amp;#101;&amp;#119;&amp;#115;&amp;#116;&amp;#117;&amp;#100;&amp;#046;&amp;#099;&amp;#111;&amp;#109;&quot;&gt;&amp;#100;&amp;#114;&amp;#101;&amp;#119;&amp;#115;&amp;#107;&amp;#105;&amp;#064;&amp;#100;&amp;#114;&amp;#101;&amp;#119;&amp;#115;&amp;#116;&amp;#117;&amp;#100;&amp;#046;&amp;#099;&amp;#111;&amp;#109;&lt;/a&gt; with comments/questions&lt;/p&gt;
 </description>
-        <pubDate>Fri, 13 Feb 2015 02:35:48 -0500</pubDate>
-        <link>/postfix/fedora/new/2015/02/13/running-postfix-3.0.html</link>
-        <guid isPermaLink="true">/postfix/fedora/new/2015/02/13/running-postfix-3.0.html</guid>
+        <pubDate>Fri, 13 Feb 2015 07:35:48 +0000</pubDate>
+        <link>/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3.0.html</link>
+        <guid isPermaLink="true">/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3.0.html</guid>
         
         
         <category>postfix</category>
@@ -68,6 +213,10 @@ openssl-devel&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
         <category>fedora</category>
         
         <category>new</category>
+        
+        <category>telnet</category>
+        
+        <category>postrix3</category>
         
       </item>
     
@@ -79,9 +228,9 @@ somehow finds your blog, and you help them. Anyway,
 this will be a technical blog. I am self taught (no collge) so I am sure there will be lots
 of people correcting me, which is good, because then I will learn :)
 Yes this blog is using Jekyll. I love doing a git commit and BAM, updated site. 
-Just have a lot to figure out to make it look nice. &lt;/p&gt;
+Just have a lot to figure out to make it look nice.&lt;/p&gt;
 </description>
-        <pubDate>Thu, 12 Feb 2015 05:35:48 -0500</pubDate>
+        <pubDate>Thu, 12 Feb 2015 10:35:48 +0000</pubDate>
         <link>/jekyll/update/new/2015/02/12/figuring-this-out.html</link>
         <guid isPermaLink="true">/jekyll/update/new/2015/02/12/figuring-this-out.html</guid>
         

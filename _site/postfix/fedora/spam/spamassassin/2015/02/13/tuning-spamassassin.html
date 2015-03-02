@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Figuring this jekyll thing out!</title>
+    <title>Tuning Spamassassin</title>
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/jekyll/update/new/2015/02/12/figuring-this-out.html">
+    <link rel="canonical" href="/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html">
 </head>
 
 
@@ -62,18 +62,43 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Figuring this jekyll thing out!</h1>
-    <p class="post-meta">Feb 12, 2015</p>
+    <h1 class="post-title">Tuning Spamassassin</h1>
+    <p class="post-meta">Feb 13, 2015</p>
   </header>
 
   <article class="post-content">
-    <p>I have read many places that having a blog is a good thing. Even if you have on there something
-that you think anyone should know, there may be that one person out there who doesn’t know, who
-somehow finds your blog, and you help them. Anyway,
-this will be a technical blog. I am self taught (no collge) so I am sure there will be lots
-of people correcting me, which is good, because then I will learn :)
-Yes this blog is using Jekyll. I love doing a git commit and BAM, updated site. 
-Just have a lot to figure out to make it look nice.</p>
+    <p>For those of us who are not large companies where paying another company for spam protection is an option, combatting spam
+can be something both fun, and annoying. Hopefully, for any newbies, here are some things
+to do that can greatly reduce the amount of spam you receive, as well as minimize
+the amount of false positives of mail identified as spam.</p>
+
+<h3> Have spamassassin learn ham and spam </h3>
+<p>Many people I have seen just install spamassassin, run sa-update, then complain 
+that they are getting a ton of spam. Spamassassin needs tuned, and tuning is quite
+easy. The quick and easy way is with sa-learn.</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sa-learn --ham --username<span class="o">=</span>vscan  --nosync /path/to/maildir/directory/cur
+sa-learn --sync
+sa-learn --spam --nosync --username<span class="o">=</span>vscan /path/to/maildir/directory/.Junk/cur
+sa-learn --sync</code></pre></div>
+
+<p>You MUST train both ham and spam to be effective.  I have to use the vscan user, as I run amavis. sa-learn will add the bayesian 
+tokens to the datbase of the user executing spamassassin.</p>
+
+<p>A nice thing to do is to report mail that you have found to be spam. If you have installed the Razmor moudle, it can be reported to 
+Vipul’s Razor. Assuming in a folder that is full of spam:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">for</span> i in <span class="sb">`</span>ls<span class="sb">`</span><span class="p">;</span> <span class="k">do</span> spamassassin -r &lt; <span class="nv">$i</span><span class="p">;</span> <span class="k">done</span></code></pre></div>
+
+<p><a href="http://wiki.apache.org/spamassassin/report_spam.pl">This</a> perl script can be run as a cron job. Just point it to a folder that contains only spam.</p>
+
+<p>Ensuring you are doing sa-update frequently, as well as the above, will help spamassassin properly identify spam/ham. 
+I am personally just tagging the subject, and putting anything with that tag in the subject into a folder that is
+just spam, and running the above commands. This, in addition to running postscreen and a few select rbls, has slowed any spam making it
+to my inbox to a trickle.</p>
+
+<p>Excellent reference: <a href="http://www.spamtips.org/p/ultimate-setup-guide.html">http://www.spamtips.org/p/ultimate-setup-guide.html</a></p>
+
 
   </article>
 
