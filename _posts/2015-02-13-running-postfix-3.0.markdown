@@ -12,6 +12,10 @@ wget ftp://postfix.mirrors.pair.com/postfix-release/official/postfix-3.0.0.tar.g
 tar -xzvf postfix-3.0.0.tar.gz
 cd postfix-3.0.0
 {% endhighlight %}
+{% highlight bash %}
+yum -y install mysql-devel openssl-devel libdb-devel libgsasl-devel
+yum groupinstall -y "Development Tools"
+{% endhighlight %}
 I put the following in a file so I could keep building it until I got all the right libs/deps
 {% highlight bash %}
 make tidy
