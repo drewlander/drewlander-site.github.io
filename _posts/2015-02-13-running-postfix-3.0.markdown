@@ -2,7 +2,7 @@
 layout: post
 title:  "Running postfix 3.0"
 date:   2015-02-13 7:35:48
-categories: postfix fedora new
+categories: postfix fedora new telnet postrix3
 ---
 Postfix 3.0 stable was released a few days ago (Feb 8). I run a few personal mailservers and decided it would be good if I were to upgrade the one running on Fedora21 (postfix + mysql + spamass-milter + greylisting), This would be a deviation as I would be compling it from source, and who knows what would break with 3.0! Here is a very brief update to what I did to get it working on Fedora 21:
 
@@ -16,11 +16,10 @@ I put the following in a file so I could keep building it until I got all the ri
 {% highlight bash %}
 make tidy
 #This builds postfix with mysql+tls+sasl support
-make -f Makefile.init makefiles 'CCARGS=-DHAS_MYSQL -I/usr/include/mysql  \
--DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\"dovecot\" \
--DUSE_TLS `pkg-config --cflags openssl`'   \
-'AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm' \
-'AUXLIBS=-L/usr/lib64 -lssl -lcrypto'  shared=yes dynamicmaps=yes
+make -f Makefile.init makefiles 'CCARGS=-DHAS_MYSQL -I/usr/include/mysql\
+-DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\"dovecot\"\
+-DUSE_TLS `pkg-config --cflags openssl`'  'AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm' 'AUXLIBS=-L/usr/lib64\
+-lssl -lcrypto'  shared=yes dynamicmaps=yes
 make
 make install
 {% endhighlight %}
