@@ -10,7 +10,7 @@ So I recently installed fedora 22 on my Macbook pro (Dual booting using GRUB2, n
 I use mutt for my email because I should never even have a chance of having one of those fancy moving pictures
 running in my email client. I really like the sidebar patch for mutt, but it is not in the rpmfusion or default repos.
 
-So I build it by downloading the mutt SRPM, editing the spec and adding the patch from [Lunar Linux](http://www.lunar-linux.org/mutt-sidebar/).
+So I built it by downloading the mutt SRPM, editing the spec and adding the patch from [Lunar Linux](http://www.lunar-linux.org/mutt-sidebar/).
 I did not do any other modifications to the SRPM apart from adding the patch. Maybe when I get more time I will do so. This means that 
 when fedora releases a new version of mutt, it will overwrite the version I have installed. That is fine, it takes a very small time to
 download and patch. Maybe when I get more time I will modify the package so it doesn't happen. Anyway, I do have a repo with the rpm.
