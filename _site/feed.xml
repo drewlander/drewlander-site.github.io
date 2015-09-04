@@ -5,9 +5,68 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 12 May 2015 19:28:59 +0000</pubDate>
-    <lastBuildDate>Tue, 12 May 2015 19:28:59 +0000</lastBuildDate>
+    <pubDate>Fri, 04 Sep 2015 07:47:28 -0400</pubDate>
+    <lastBuildDate>Fri, 04 Sep 2015 07:47:28 -0400</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>FreeBSD on Xhyve</title>
+        <description>&lt;p&gt;&lt;a href=&quot;https://github.com/mist64/xhyve&quot;&gt;xhyve&lt;/a&gt; is essentially a port of FreeBSD’s &lt;a href=&quot;http://bhyve.org&quot;&gt;bhyve&lt;/a&gt; to OSX. The instructions
+show how to run Ubuntu (with which you can use to boot other linux distro’s), but lack any documentation on how to run FreeBSD with it. Here is how to do it:&lt;/p&gt;
+&lt;h3&gt;Clone and build the latest xhyve&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone git@github.com:mist64/xhyve.git
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;hyve
+make
+mkdir freebsd
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;freebsd&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt; Download latest FreeBSD virtual machine image&lt;/h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;wget http://ftp10.freebsd.org/pub/FreeBSD/releases/VM-IMAGES/10.2-RELEASE/amd64/Latest/FreeBSD-10.2-RELEASE-amd64.raw.xz
+unxz FreeBSD-10.2-RELEASE-amd64.raw.xz
+tar xf FreeBSD-10.2-RELEASE-amd64.raw.xz
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ../&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3&gt; Setup the runfreebsd script &lt;/h3&gt;
+&lt;p&gt;Create a file call runfreebsd with the following contents:&lt;/p&gt;
+&lt;pre&gt;
+#!/bin/sh
+
+# FreeBSD
+# this is provided in the xhyve sources
+USERBOOT=&quot;test/userboot.so&quot;
+BOOTVOLUME=&quot;freebsd/FreeBSD-10.2-RELEASE-amd64.raw&quot;
+KERNELENV=&quot;&quot;
+
+MEM=&quot;-m 4G&quot;
+#SMP=&quot;-c 2&quot;
+NET=&quot;-s 2:0,virtio-net&quot;
+IMG_HDD=&quot;-s 4,virtio-blk,freebsd/FreeBSD-10.2-RELEASE-amd64.raw&quot;
+PCI_DEV=&quot;-s 0:0,hostbridge -s 31,lpc&quot;
+LPC_DEV=&quot;-l com1,stdio&quot;
+ACPI=&quot;-A&quot;
+
+# FreeBSD
+build/xhyve $ACPI $MEM $SMP $PCI_DEV $LPC_DEV $NET $IMG_CD $IMG_HDD $UUID -f fbsd,$USERBOOT,$BOOTVOLUME,&quot;$KERNELENV&quot;
+&lt;/pre&gt;
+&lt;h3&gt;Run the script&lt;h3&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;bash runfreebsd.sh&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+Stuck with ~20GB box but hey, its freebsd w/xhve!
+&lt;/h3&gt;&lt;/h3&gt;
+</description>
+        <pubDate>Sat, 18 Apr 2015 04:00:48 -0400</pubDate>
+        <link>/xhyve/freebsd/2015/04/18/xhyve-freebsd.html</link>
+        <guid isPermaLink="true">/xhyve/freebsd/2015/04/18/xhyve-freebsd.html</guid>
+        
+        
+        <category>xhyve</category>
+        
+        <category>freebsd</category>
+        
+      </item>
     
       <item>
         <title>Centos 7 and systemd-nspawn</title>
@@ -83,7 +142,7 @@ That is logged in /var/log/messages (or if you started your container from the c
 &lt;p&gt;Excellent reference: &lt;a href=&quot;http://0pointer.de/blog/projects/changing-roots.html&quot;&gt;http://0pointer.de/blog/projects/changing-roots.html&lt;/a&gt;&lt;/p&gt;
 
 </description>
-        <pubDate>Sat, 18 Apr 2015 08:00:48 +0000</pubDate>
+        <pubDate>Sat, 18 Apr 2015 04:00:48 -0400</pubDate>
         <link>/centos/systemd/nspawn/systemd-nspawn/centos7/containers/2015/04/18/systemd-nspawn-centos-7.html</link>
         <guid isPermaLink="true">/centos/systemd/nspawn/systemd-nspawn/centos7/containers/2015/04/18/systemd-nspawn-centos-7.html</guid>
         
@@ -137,7 +196,7 @@ to my inbox to a trickle.&lt;/p&gt;
 &lt;p&gt;Excellent reference: &lt;a href=&quot;http://www.spamtips.org/p/ultimate-setup-guide.html&quot;&gt;http://www.spamtips.org/p/ultimate-setup-guide.html&lt;/a&gt;&lt;/p&gt;
 
 </description>
-        <pubDate>Fri, 13 Feb 2015 07:35:48 +0000</pubDate>
+        <pubDate>Fri, 13 Feb 2015 02:35:48 -0500</pubDate>
         <link>/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html</link>
         <guid isPermaLink="true">/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html</guid>
         
@@ -203,7 +262,7 @@ openssl-devel&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;No idea how to do comments yet, so email &lt;a href=&quot;&amp;#109;&amp;#097;&amp;#105;&amp;#108;&amp;#116;&amp;#111;:&amp;#100;&amp;#114;&amp;#101;&amp;#119;&amp;#115;&amp;#107;&amp;#105;&amp;#064;&amp;#100;&amp;#114;&amp;#101;&amp;#119;&amp;#115;&amp;#116;&amp;#117;&amp;#100;&amp;#046;&amp;#099;&amp;#111;&amp;#109;&quot;&gt;&amp;#100;&amp;#114;&amp;#101;&amp;#119;&amp;#115;&amp;#107;&amp;#105;&amp;#064;&amp;#100;&amp;#114;&amp;#101;&amp;#119;&amp;#115;&amp;#116;&amp;#117;&amp;#100;&amp;#046;&amp;#099;&amp;#111;&amp;#109;&lt;/a&gt; with comments/questions&lt;/p&gt;
 </description>
-        <pubDate>Fri, 13 Feb 2015 07:35:48 +0000</pubDate>
+        <pubDate>Fri, 13 Feb 2015 02:35:48 -0500</pubDate>
         <link>/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3.0.html</link>
         <guid isPermaLink="true">/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3.0.html</guid>
         
@@ -230,7 +289,7 @@ of people correcting me, which is good, because then I will learn :)
 Yes this blog is using Jekyll. I love doing a git commit and BAM, updated site. 
 Just have a lot to figure out to make it look nice.&lt;/p&gt;
 </description>
-        <pubDate>Thu, 12 Feb 2015 10:35:48 +0000</pubDate>
+        <pubDate>Thu, 12 Feb 2015 05:35:48 -0500</pubDate>
         <link>/jekyll/update/new/2015/02/12/figuring-this-out.html</link>
         <guid isPermaLink="true">/jekyll/update/new/2015/02/12/figuring-this-out.html</guid>
         
