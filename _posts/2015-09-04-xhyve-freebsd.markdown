@@ -5,7 +5,7 @@ date:   2015-04-18 8:00:48
 categories: xhyve freebsd
 ---
 [xhyve](https://github.com/mist64/xhyve) is essentially a port of FreeBSD's [bhyve](http://bhyve.org) to OSX. The instructions
-show how to run Ubuntu (with which you can use to boot other linux distro's), but lack any documentation on how to run FreeBSD with it. Here is how to do it:
+show how to run Ubuntu (which you can dissect and figure out how to boot other linux distro's), but lack any documentation on how to run FreeBSD with it. Here is how to do it:
 <h3>Clone and build the latest xhyve</h3>
 {% highlight bash %}
 git clone git@github.com:mist64/xhyve.git

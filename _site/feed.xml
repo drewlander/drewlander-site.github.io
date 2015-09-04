@@ -5,14 +5,14 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 04 Sep 2015 07:47:28 -0400</pubDate>
-    <lastBuildDate>Fri, 04 Sep 2015 07:47:28 -0400</lastBuildDate>
+    <pubDate>Fri, 04 Sep 2015 07:50:12 -0400</pubDate>
+    <lastBuildDate>Fri, 04 Sep 2015 07:50:12 -0400</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
         <title>FreeBSD on Xhyve</title>
         <description>&lt;p&gt;&lt;a href=&quot;https://github.com/mist64/xhyve&quot;&gt;xhyve&lt;/a&gt; is essentially a port of FreeBSD’s &lt;a href=&quot;http://bhyve.org&quot;&gt;bhyve&lt;/a&gt; to OSX. The instructions
-show how to run Ubuntu (with which you can use to boot other linux distro’s), but lack any documentation on how to run FreeBSD with it. Here is how to do it:&lt;/p&gt;
+show how to run Ubuntu (which you can dissect and figure out how to boot other linux distro’s), but lack any documentation on how to run FreeBSD with it. Here is how to do it:&lt;/p&gt;
 &lt;h3&gt;Clone and build the latest xhyve&lt;/h3&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone git@github.com:mist64/xhyve.git
