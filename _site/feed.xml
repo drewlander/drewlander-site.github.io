@@ -5,8 +5,8 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 19 Oct 2015 13:52:04 -0400</pubDate>
-    <lastBuildDate>Mon, 19 Oct 2015 13:52:04 -0400</lastBuildDate>
+    <pubDate>Mon, 19 Oct 2015 14:08:56 -0400</pubDate>
+    <lastBuildDate>Mon, 19 Oct 2015 14:08:56 -0400</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -163,7 +163,7 @@ That is logged in /var/log/messages (or if you started your container from the c
     
       <item>
         <title>Active Directory Password Export Service Silent Install</title>
-        <description>[password export service](https://technet.microsoft.com/en-us/library/cc974435(v=ws.10).aspx) allows you to export users and passwords from one active
+        <description>[password export service](https://technet.microsoft.com/en-us/library/cc974435.aspx) allows you to export users and passwords from one active
 directory domain to another. All the guides I found show how to install it graphically. It took a bit but eventually I was able to install the service
 AND import the key created with ADMT all automatically. I used chef but any automation tool will work. It did require some hacking.
 
