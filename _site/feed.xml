@@ -5,8 +5,8 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Fri, 04 Sep 2015 07:50:12 -0400</pubDate>
-    <lastBuildDate>Fri, 04 Sep 2015 07:50:12 -0400</lastBuildDate>
+    <pubDate>Mon, 19 Oct 2015 13:52:04 -0400</pubDate>
+    <lastBuildDate>Mon, 19 Oct 2015 13:52:04 -0400</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -158,6 +158,53 @@ That is logged in /var/log/messages (or if you started your container from the c
         <category>centos7</category>
         
         <category>containers</category>
+        
+      </item>
+    
+      <item>
+        <title>Active Directory Password Export Service Silent Install</title>
+        <description>[password export service](https://technet.microsoft.com/en-us/library/cc974435(v=ws.10).aspx) allows you to export users and passwords from one active
+directory domain to another. All the guides I found show how to install it graphically. It took a bit but eventually I was able to install the service
+AND import the key created with ADMT all automatically. I used chef but any automation tool will work. It did require some hacking.
+
+You have to edit the password export service yourself via orca, instEd, etc... Something has to alter a datbase table, or else it will ALWAYS prompt and ask if
+you who you want to run the service as. You have to edit under InstallExecuteSequence:
+&lt;pre&gt;
+StartCredentials 0=1
+&lt;/pre&gt;
+Then you can use this msi (or save a transform) and it will no longer prompt as a user to login as.
+
+Run the following
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;msiexec /i &lt;span class=&quot;s2&quot;&gt;&amp;quot;c:\password_export_server.msi&amp;quot;&lt;/span&gt; /l*v &lt;span class=&quot;s2&quot;&gt;&amp;quot;c:\install.log&amp;quot;&lt;/span&gt; /qn &lt;span class=&quot;nv&quot;&gt;REBOOT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;ReallySuppress&amp;quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;SENCRYPTIONFILEPATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;c:\key.pes&amp;quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;sKeyPassword&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;password&amp;quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;sConfPassword&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;password&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+Though, you really do not need anything after REBOOT. It will NOT import any key at all. Also, you have to reboot anyway to get the service to start properly, otherwise
+you will get RPC errors connecting from the destination domain. After you install the service, reboot, then start the Password Export Service. Then run the following
+to actually have the key imported:
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;C:\Windows\system32\PesKey.exe C:\key.pes &amp;quot;&lt;/span&gt;password&lt;span class=&quot;err&quot;&gt;&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+Now ADMT _should_ let you migrate the user, and you can do it all automatically. Yay!
+
+</description>
+        <pubDate>Sat, 18 Apr 2015 04:00:48 -0400</pubDate>
+        <link>/active/directory/password/export/service/automatic/silent/installation/install/2015/04/18/password-export-service-silent-install.html</link>
+        <guid isPermaLink="true">/active/directory/password/export/service/automatic/silent/installation/install/2015/04/18/password-export-service-silent-install.html</guid>
+        
+        
+        <category>active</category>
+        
+        <category>directory</category>
+        
+        <category>password</category>
+        
+        <category>export</category>
+        
+        <category>service</category>
+        
+        <category>automatic</category>
+        
+        <category>silent</category>
+        
+        <category>installation</category>
+        
+        <category>install</category>
         
       </item>
     
