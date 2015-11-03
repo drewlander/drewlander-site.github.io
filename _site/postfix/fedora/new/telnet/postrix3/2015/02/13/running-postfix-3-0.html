@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Running postfix 3.0</title>
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3-0.html">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Drewskiwooskie Blogarooskie</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+          <a class="page-link" href="/archive.html">Archive</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Running postfix 3.0</h1>
+    <p class="post-meta">Feb 13, 2015</p>
+  </header>
+
+  <article class="post-content">
+    <p>Postfix 3.0 stable was released a few days ago (Feb 8). I run a few personal mailservers and decided it would be good if I were to upgrade the one running on Fedora21 (postfix + mysql + spamass-milter + greylisting), This would be a deviation as I would be compling it from source, and who knows what would break with 3.0! Here is a very brief update to what I did to get it working on Fedora 21:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">yum remove postfix -y
+wget ftp://postfix.mirrors.pair.com/postfix-release/official/postfix-3.0.0.tar.gz
+tar -xzvf postfix-3.0.0.tar.gz
+<span class="nb">cd </span>postfix-3.0.0</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">yum -y install mysql-devel openssl-devel libdb-devel libgsasl-devel
+yum groupinstall -y <span class="s2">"Development Tools"</span></code></pre></figure>
+
+<p>I put the following in a file so I could keep building it until I got all the right libs/deps</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">make tidy
+<span class="c">#This builds postfix with mysql+tls+sasl support</span>
+make -f Makefile.init makefiles <span class="s1">'CCARGS=-DHAS_MYSQL -I/usr/include/mysql\
+-DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\"dovecot\"\
+-DUSE_TLS `pkg-config --cflags openssl`'</span>  <span class="s1">'AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm'</span> <span class="s1">'AUXLIBS=-L/usr/lib64\
+-lssl -lcrypto'</span>  <span class="nv">shared</span><span class="o">=</span>yes <span class="nv">dynamicmaps</span><span class="o">=</span>yes
+make
+make install</code></pre></figure>
+
+<p>For the install part, I used the default paths given.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/usr/sbin/postfix start</code></pre></figure>
+
+<p>Do not forget when testing with telnet (if using postscreen) to turn on crlf</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">telnet your.mailserver.com 25
+Trying 127.0.0.1...
+Connected to your.mailserver.com.
+Escape character is <span class="s1">'^]'</span>.
+220 your.mailserver.com ESMTP Postfix
+^]
+<span class="gp">telnet&gt; </span><span class="nb">set </span>crlf
+Will send carriage returns as telnet &lt;CR&gt;&lt;LF&gt;.</code></pre></figure>
+
+<p>For fedora 21, (I do not recall off the top of my head) but these are the packages you need to build with mysql+tls:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">mariadb-devel
+openssl-devel</code></pre></figure>
+
+<p>The nice thing too is that when I did a yum -y remove postfix, it left my main.cf intact, just saved it as main.cf.rpmsave. So before starting postfix don’t foget to do:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">cp /etc/postfix/main.cf.rpmsave /etc/postfix/main.cf</code></pre></figure>
+
+<p>Also, I left backwards compatability on with postfix, have not tried turning it off. When I do, I will take note of what I had and what needed to be changed.</p>
+
+<p>No idea how to do comments yet, so email <a href="&#109;&#097;&#105;&#108;&#116;&#111;:&#100;&#114;&#101;&#119;&#115;&#107;&#105;&#064;&#100;&#114;&#101;&#119;&#115;&#116;&#117;&#100;&#046;&#099;&#111;&#109;">&#100;&#114;&#101;&#119;&#115;&#107;&#105;&#064;&#100;&#114;&#101;&#119;&#115;&#116;&#117;&#100;&#046;&#099;&#111;&#109;</a> with comments/questions</p>
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Drewskiwooskie Blogarooskie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>Drewskiwooskie Blogarooskie</li>
+          <li><a href="mailto:"></a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text"></p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59814142-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </body>
+
+</html>

@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Archive</title>
+    <title>Mailonacircle: Mailinabox(ish) for Centos 7 With Selinux=Enabled</title>
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/archive.html">
+    <link rel="canonical" href="/centos/postfix/dovecot/dkim/spamasassain/clamav/postfixadmin/chef/chef-solo/selinux/postgrey/postgrey-milter/mariadb/2015/10/19/centos-mailonacircle.html">
 </head>
 
 
@@ -62,36 +62,50 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Archive</h1>
+    <h1 class="post-title">Mailonacircle: Mailinabox(ish) for Centos 7 With Selinux=Enabled</h1>
+    <p class="post-meta">Oct 19, 2015</p>
   </header>
 
   <article class="post-content">
-    <h2 id="blog-posts">Blog Posts</h2>
+    <p>Recently I saw the latest mailinabox, and man is it fancy. I looked, and there was nothing like that for centos.
+I wanted a way to help the lazy people out there setup a centos 7 box with postfixadmin, dovecot, spamasassin, clamav-milter, postgrey-milter, mariadb, and dkim with ease. So in very short time in between down time, I wrote <a href="https://github.com/drewlander/mailonacircle">mailonacircle</a>. It uses chef-solo, and the attributes are basic and do not make a lot of sense at first glance, but it is a start. With a quick copy/pasta, you can take a fresh centos 7 server and install all of the above, with selinux enabled. By default, there is no default domain (and of course no open relay), do if someone were to just copy/pasta, no damage done. You have to add the domains and mailboxes in postfixadmin. Also smtpauth should work as well.</p>
+
+<p>Reasons I did it this way:</p>
 
 <ul>
-  <li>
-    <p>19 Oct 2015 » <a href="/centos/postfix/dovecot/dkim/spamasassain/clamav/postfixadmin/chef/chef-solo/selinux/postgrey/postgrey-milter/mariadb/2015/10/19/centos-mailonacircle.html"> Mailonacircle: Mailinabox(ish) for Centos 7 With Selinux=Enabled </a></p>
+  <li>Why Chef? Why not bash/ansible/fancypants thing:
+    <ul>
+      <li>I know Chef very well</li>
+      <li>Because I have a hammer, everything looks like a nail
+        <ul>
+          <li>To be fair, chef solo is perfect for this. Run it once, “make this box look like X”, and you can remove chef-solo if you wanted.</li>
+        </ul>
+      </li>
+    </ul>
   </li>
-  <li>
-    <p>19 Oct 2015 » <a href="/active/directory/password/export/service/automatic/silent/installation/install/2015/10/19/password-export-service-silent-install.html"> Active Directory Password Export Service Silent Install </a></p>
+  <li>You did not use any community cookbooks! You should feel bad
+    <ul>
+      <li>I went for simplicity. Why do I need an entire separate cookbook to install mariadb, create a db and create a few users?</li>
+    </ul>
   </li>
-  <li>
-    <p>18 Apr 2015 » <a href="/xhyve/freebsd/2015/04/18/xhyve-freebsd.html"> FreeBSD on Xhyve </a></p>
-  </li>
-  <li>
-    <p>18 Apr 2015 » <a href="/centos/systemd/nspawn/systemd-nspawn/centos7/containers/2015/04/18/systemd-nspawn-centos-7.html"> Centos 7 and systemd-nspawn </a></p>
-  </li>
-  <li>
-    <p>13 Feb 2015 » <a href="/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html"> Tuning Spamassassin </a></p>
-  </li>
-  <li>
-    <p>13 Feb 2015 » <a href="/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3-0.html"> Running postfix 3.0 </a></p>
-  </li>
-  <li>
-    <p>12 Feb 2015 » <a href="/jekyll/update/new/2015/02/12/figuring-this-out.html"> Figuring this jekyll thing out! </a></p>
+  <li>Selinux enabled is hard
+    <ul>
+      <li><a href="http://stopdisablingselinux.com/">http://stopdisablingselinux.com/</a></li>
+    </ul>
   </li>
 </ul>
 
+<p>This is not as fancy as mailinabox, no fancy web ui, and this assumes at least basic troubleshooting/following directions. What is still left:</p>
+
+<ul>
+  <li>Attributes need to make more sense</li>
+  <li>There are some hardcoded references to the mail database (specifically called mail in the sql maps for postfix)</li>
+  <li>Would love to solve the  postfixadmin password hash manual setup.</li>
+  <li>Would like to add more tweaks for configuration.</li>
+  <li>Need to NOT chmod 777, EVER</li>
+  <li>Why did I enabled ports AND unix sockets for milters to listen on? (127.0.0.1, but STILL)</li>
+  <li>Clean up recipes (single responsibility)</li>
+</ul>
 
   </article>
 
