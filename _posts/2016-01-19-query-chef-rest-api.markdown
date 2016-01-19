@@ -6,7 +6,7 @@ categories: chef ruby rest httparty raw api
 ---
 If you want to talk to the chef API without using some wrapper like Ridley, knife, etc.., this is how you do it:
 
-Note: This is taken from (here)[https://gist.github.com/gmcmillan/3184964] but modified to use httparty
+Note: This is taken from [here](https://gist.github.com/gmcmillan/3184964) but modified to use httparty
 {% highlight ruby %}
 require 'base64'
 require 'time'
