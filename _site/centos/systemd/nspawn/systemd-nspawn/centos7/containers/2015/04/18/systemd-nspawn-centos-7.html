@@ -142,20 +142,18 @@ That is logged in /var/log/messages (or if you started your container from the c
 
 <p>Redhat 7.2 (CentOS Linux release 7.2.1511) has a newer version of machinectl that has login. No need to use nsenter anymore.</p>
 
-<p>```
-machinectl list
-MACHINE                          CONTAINER SERVICE       <br />
-php-fpm                          container nspawn        <br />
-mysql                            container nspawn        <br />
-webstuff                         container nspawn</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">machinectl list
+MACHINE                          CONTAINER SERVICE         
+php-fpm                          container nspawn          
+mysql                            container nspawn          
+webstuff                         container nspawn          
 
-<p>machinectl login mysql
-Connected to container mysql. Press ^] three times within 1s to exit session.</p>
+machinectl login mysql
+Connected to container mysql. Press ^<span class="o">]</span> three <span class="nb">times </span>within 1s to <span class="nb">exit </span>session.
 
-<p>Debian GNU/Linux stretch/sid drewstud.com pts/0</p>
+Debian GNU/Linux stretch/sid drewstud.com pts/0
 
-<p>drewstud login: 
-```</p>
+drewstud login:</code></pre></div>
 
 
   </article>
