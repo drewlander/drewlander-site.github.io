@@ -80,3 +80,22 @@ To leave just type exit.
 
 Excellent reference: [http://0pointer.de/blog/projects/changing-roots.html](http://0pointer.de/blog/projects/changing-roots.html)
 
+## UPDATE:
+
+Redhat 7.2 (CentOS Linux release 7.2.1511) has a newer version of machinectl that has login. No need to use nsenter anymore.
+
+```
+machinectl list
+MACHINE                          CONTAINER SERVICE         
+php-fpm                          container nspawn          
+mysql                            container nspawn          
+webstuff                         container nspawn          
+
+machinectl login mysql
+Connected to container mysql. Press ^] three times within 1s to exit session.
+
+Debian GNU/Linux stretch/sid drewstud.com pts/0
+
+drewstud login: 
+```
+

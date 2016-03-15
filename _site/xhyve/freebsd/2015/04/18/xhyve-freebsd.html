@@ -71,18 +71,18 @@
 show how to run Ubuntu (which you can dissect and figure out how to boot other linux distro’s), but lack any documentation on how to run FreeBSD with it. Here is how to do it:</p>
 <h3>Clone and build the latest xhyve</h3>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git clone git@github.com:mist64/xhyve.git
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">git clone git@github.com:mist64/xhyve.git
 <span class="nb">cd </span>hyve
 make
 mkdir freebsd
-<span class="nb">cd </span>freebsd</code></pre></figure>
+<span class="nb">cd </span>freebsd</code></pre></div>
 
 <h3> Download latest FreeBSD virtual machine image</h3>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">wget http://ftp10.freebsd.org/pub/FreeBSD/releases/VM-IMAGES/10.2-RELEASE/amd64/Latest/FreeBSD-10.2-RELEASE-amd64.raw.xz
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">wget http://ftp10.freebsd.org/pub/FreeBSD/releases/VM-IMAGES/10.2-RELEASE/amd64/Latest/FreeBSD-10.2-RELEASE-amd64.raw.xz
 unxz FreeBSD-10.2-RELEASE-amd64.raw.xz
 tar xf FreeBSD-10.2-RELEASE-amd64.raw.xz
-<span class="nb">cd</span> ../</code></pre></figure>
+<span class="nb">cd</span> ../</code></pre></div>
 
 <h3> Setup the runfreebsd script </h3>
 <p>Create a file call runfreebsd with the following contents:</p>
@@ -108,7 +108,7 @@ build/xhyve $ACPI $MEM $SMP $PCI_DEV $LPC_DEV $NET $IMG_CD $IMG_HDD $UUID -f fbs
 </pre>
 <h3>Run the script<h3>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">bash runfreebsd.sh</code></pre></figure>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">bash runfreebsd.sh</code></pre></div>
 
 Stuck with ~20GB box but hey, its freebsd w/xhve!
 </h3></h3>

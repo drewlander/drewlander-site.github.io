@@ -77,7 +77,7 @@ and older verson of systemd-nspawn/machinectl so some features are missing in th
 
 <h3> Create a basic centos 7 bootstrap</h3>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">yum -y --releasever<span class="o">=</span>7 --nogpg --installroot<span class="o">=</span>/srv/yaystuff install systemd passwd yum fedora-release vim-minimal</code></pre></figure>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">yum -y --releasever<span class="o">=</span><span class="m">7</span> --nogpg --installroot<span class="o">=</span>/srv/yaystuff install systemd passwd yum fedora-release vim-minimal</code></pre></div>
 
 <p>This will install a basic bootstrap centos 7 environment</p>
 <h3> Reset the password in the container </h3>
@@ -85,15 +85,15 @@ and older verson of systemd-nspawn/machinectl so some features are missing in th
 let you change the password if you “boot” your container. So currently, you can be fancy and make modules, or be only a slightly
 bad person and disable selinux, change the password, re-enable (things work fine after this point with selinux enabled)</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">setenforce 0
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">setenforce 0
 systemd-nspawn -D /srv/yaystuff
 passwd
-<span class="nb">exit
-</span>setenforce 1</code></pre></figure>
+<span class="nb">exit</span>
+setenforce 1</code></pre></div>
 
 <h3> Boot your container and install your fancypants stuff</h3>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">systemd-nspawn -D /srv/yaystuff/ -b</code></pre></figure>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">systemd-nspawn -D /srv/yaystuff/ -b</code></pre></div>
 
 <p>This will drop you into a shell, where you can yum install/configure to your hearts desire.</p>
 
@@ -103,13 +103,13 @@ are serving httpd on your host.</p>
 
 <p>When you are done installing fancy stuff, I just issue</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">halt</code></pre></figure>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">halt</code></pre></div>
 
 <p>And it stops the container and takes you out of your chroot.</p>
 
 <p>You can also bind paths outside of your container into the container’s chroot</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">systemd-nspawn -D /srv/yaystuff/ -b --bind<span class="o">=</span>/path/on/host:/path/in/container</code></pre></figure>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">systemd-nspawn -D /srv/yaystuff/ -b --bind<span class="o">=</span>/path/on/host:/path/in/container</code></pre></div>
 
 <h3>Start your container with systemd </h3>
 <p>edit the following file: /etc/systemd/system/yaystuff.service</p>
@@ -123,20 +123,39 @@ KillMode=process
 </pre>
 <p>Then reload systemd and start the container</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">systemd start yaystuff.service</code></pre></figure>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">systemd start yaystuff.service</code></pre></div>
 
 <p>Now the version of machinectl on centos 7.0 does not have a login feature. So you have to use nsenter. To use nsenter, you have to get the pid of your container. 
 That is logged in /var/log/messages (or if you started your container from the cli)</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">grep -A 1 <span class="s2">"Spawning namespace container on /srv/yaystuff"</span> /var/log/messages</code></pre></figure>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">grep -A <span class="m">1</span> <span class="s2">&quot;Spawning namespace container on /srv/yaystuff&quot;</span> /var/log/messages</code></pre></div>
 
 <p>Grab the pid there and then execute:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">nsenter -m -u -i -n -p -t <span class="nv">$PID</span></code></pre></figure>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">nsenter -m -u -i -n -p -t <span class="nv">$PID</span></code></pre></div>
 
 <p>To leave just type exit.</p>
 
 <p>Excellent reference: <a href="http://0pointer.de/blog/projects/changing-roots.html">http://0pointer.de/blog/projects/changing-roots.html</a></p>
+
+<h2 id="update">UPDATE:</h2>
+
+<p>Redhat 7.2 (CentOS Linux release 7.2.1511) has a newer version of machinectl that has login. No need to use nsenter anymore.</p>
+
+<p>```
+machinectl list
+MACHINE                          CONTAINER SERVICE       <br />
+php-fpm                          container nspawn        <br />
+mysql                            container nspawn        <br />
+webstuff                         container nspawn</p>
+
+<p>machinectl login mysql
+Connected to container mysql. Press ^] three times within 1s to exit session.</p>
+
+<p>Debian GNU/Linux stretch/sid drewstud.com pts/0</p>
+
+<p>drewstud login: 
+```</p>
 
 
   </article>
