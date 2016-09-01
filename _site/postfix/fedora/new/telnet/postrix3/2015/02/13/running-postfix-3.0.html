@@ -69,48 +69,48 @@
   <article class="post-content">
     <p>Postfix 3.0 stable was released a few days ago (Feb 8). I run a few personal mailservers and decided it would be good if I were to upgrade the one running on Fedora21 (postfix + mysql + spamass-milter + greylisting), This would be a deviation as I would be compling it from source, and who knows what would break with 3.0! Here is a very brief update to what I did to get it working on Fedora 21:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">yum remove postfix -y
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">yum remove postfix -y
 wget ftp://postfix.mirrors.pair.com/postfix-release/official/postfix-3.0.0.tar.gz
 tar -xzvf postfix-3.0.0.tar.gz
-<span class="nb">cd </span>postfix-3.0.0</code></pre></div>
+<span class="nb">cd </span>postfix-3.0.0</code></pre></figure>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">yum -y install mysql-devel openssl-devel libdb-devel libgsasl-devel
-yum groupinstall -y <span class="s2">&quot;Development Tools&quot;</span></code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">yum -y install mysql-devel openssl-devel libdb-devel libgsasl-devel
+yum groupinstall -y <span class="s2">"Development Tools"</span></code></pre></figure>
 
 <p>I put the following in a file so I could keep building it until I got all the right libs/deps</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">make tidy
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">make tidy
 <span class="c">#This builds postfix with mysql+tls+sasl support</span>
-make -f Makefile.init makefiles <span class="s1">&#39;CCARGS=-DHAS_MYSQL -I/usr/include/mysql\</span>
-<span class="s1">-DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\&quot;dovecot\&quot;\</span>
-<span class="s1">-DUSE_TLS `pkg-config --cflags openssl`&#39;</span>  <span class="s1">&#39;AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm&#39;</span> <span class="s1">&#39;AUXLIBS=-L/usr/lib64\</span>
-<span class="s1">-lssl -lcrypto&#39;</span>  <span class="nv">shared</span><span class="o">=</span>yes <span class="nv">dynamicmaps</span><span class="o">=</span>yes
+make -f Makefile.init makefiles <span class="s1">'CCARGS=-DHAS_MYSQL -I/usr/include/mysql\
+-DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\"dovecot\"\
+-DUSE_TLS `pkg-config --cflags openssl`'</span>  <span class="s1">'AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm'</span> <span class="s1">'AUXLIBS=-L/usr/lib64\
+-lssl -lcrypto'</span>  <span class="nv">shared</span><span class="o">=</span>yes <span class="nv">dynamicmaps</span><span class="o">=</span>yes
 make
-make install</code></pre></div>
+make install</code></pre></figure>
 
 <p>For the install part, I used the default paths given.</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">/usr/sbin/postfix start</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/usr/sbin/postfix start</code></pre></figure>
 
 <p>Do not forget when testing with telnet (if using postscreen) to turn on crlf</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">telnet your.mailserver.com 25
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">telnet your.mailserver.com 25
 Trying 127.0.0.1...
 Connected to your.mailserver.com.
-Escape character is <span class="s1">&#39;^]&#39;</span>.
-<span class="m">220</span> your.mailserver.com ESMTP Postfix
-^<span class="o">]</span>
-telnet&gt; <span class="nb">set </span>crlf
-Will send carriage returns as telnet &lt;CR&gt;&lt;LF&gt;.</code></pre></div>
+Escape character is <span class="s1">'^]'</span>.
+220 your.mailserver.com ESMTP Postfix
+^]
+<span class="gp">telnet&gt; </span><span class="nb">set </span>crlf
+Will send carriage returns as telnet &lt;CR&gt;&lt;LF&gt;.</code></pre></figure>
 
 <p>For fedora 21, (I do not recall off the top of my head) but these are the packages you need to build with mysql+tls:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">mariadb-devel
-openssl-devel</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">mariadb-devel
+openssl-devel</code></pre></figure>
 
 <p>The nice thing too is that when I did a yum -y remove postfix, it left my main.cf intact, just saved it as main.cf.rpmsave. So before starting postfix don’t foget to do:</p>
 
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">cp /etc/postfix/main.cf.rpmsave /etc/postfix/main.cf</code></pre></div>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">cp /etc/postfix/main.cf.rpmsave /etc/postfix/main.cf</code></pre></figure>
 
 <p>Also, I left backwards compatability on with postfix, have not tried turning it off. When I do, I will take note of what I had and what needed to be changed.</p>
 

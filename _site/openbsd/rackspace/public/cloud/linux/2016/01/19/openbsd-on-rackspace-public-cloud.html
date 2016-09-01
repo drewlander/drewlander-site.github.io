@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Installing OpenBSD On Rackspace Public Cloud</title>
+    <meta name="description" content="">
+
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="canonical" href="/openbsd/rackspace/public/cloud/linux/2016/01/19/openbsd-on-rackspace-public-cloud.html">
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Drewskiwooskie Blogarooskie</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+          <a class="page-link" href="/archive.html">Archive</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Installing OpenBSD On Rackspace Public Cloud</h1>
+    <p class="post-meta">Jan 19, 2016</p>
+  </header>
+
+  <article class="post-content">
+    <p>For the longest time, I wanted to see FreeBSD on Rackspace Public Cloud. We finally saw it, with FreeBSD 10.
+For the longest time I wanted to see OpenBSD on Rackspace Public Cloud. With their boot.iso you are able to
+attempt to boot into a pxe environment and boot OpenBSD 5.7, but it lacks the necessary drivers for xen.
+I gave up for a while. but tried with the release of OpenBSD 6. I am happy to report, that you CAN and it WORKS!
+To do so, you boot into a linux distro, download bsd.rd, add it to grub, and boot off the RAM disk. Things to note:</p>
+
+<ul>
+  <li>Get ALL the ip information from the box, you will need to setup IPs statically (I just copy /etc/sysconfig/network-settings eth0/eth1 configs to a temp file to read later)</li>
+  <li>You will be doing this via a console session, which means you have to use a browser that supports java.</li>
+</ul>
+
+<p>For the purposes of this demonstration, I will be using their Fedora 24 PVHVM image using their General Purpose flavor.</p>
+
+<ul>
+  <li>Boot a Fedora 24 image into the size that you want.</li>
+  <li>Login to the server.</li>
+  <li>Download the freebsd installer that we will boot from</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">wget http://ftp.openbsd.org/pub/OpenBSD/6.0/amd64/bsd.rd 
+mv bsd.rd /openbsd.rd</code></pre></figure>
+
+<ul>
+  <li>Modify /etc/grub.d/40_custom and add:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">  menuentry <span class="s2">"Install OpenBSD from RAM disk"</span> <span class="o">{</span>
+    <span class="nb">set </span><span class="nv">root</span><span class="o">=(</span>hd0,1<span class="o">)</span>
+    kopenbsd /openbsd.rd
+  <span class="o">}</span></code></pre></figure>
+
+<ul>
+  <li>Edit /etc/default/grub and change GRUB_TIMEOUT=1 to GRUB_TIMEOUT=30</li>
+  <li>I remove extlinux and use grub2, because reasons (I like grub2)</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">dnf -y remove syslinux-extlinux
+rm -f /boot/extlinux.conf
+dnf -y install grubby grub2
+grub2-mkconfig -o /boot/grub2/grub.cfg</code></pre></figure>
+
+<ul>
+  <li>Issue the fantastical “reboot” command. It makes the unicorns appear</li>
+  <li>Connect via their web interface to a console session of your server. It should be stuck at the grub menu</li>
+  <li>Choose “Install OpenBSD from RAM disk”</li>
+  <li>At the install screen choose (I)Install</li>
+  <li>default keyboard is fine</li>
+  <li>set your hostname</li>
+  <li>xnf0 will correspond to eth0 settings (public interface). Configure that interface
+<img src="/assets/openbsd_network.png" alt="OpenBSD network config" /></li>
+  <li>enter the ip address and netmask. You can enter in your ipv6 info if you feel you can not typo anything (copy/paste does NOT work for me in this virtual console java session)</li>
+  <li>choose done (you can configure xnf1 later)</li>
+  <li>enter in your default route (gateway)</li>
+  <li>enter in your hostname and nameservers</li>
+  <li>the rest should be self explanatory. I did not change my console to com0, Timezone I chose US/Easten</li>
+  <li>wd0 is the root disk</li>
+  <li>I did the auto layout</li>
+  <li>for name(s) sets, I did not do anything with X (use - to deselect). Choose done when done</li>
+  <li>reboot and enjoy your new system!
+<img src="/assets/openbsd_complete.png" alt="OpenBSD complete" /></li>
+</ul>
+
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Drewskiwooskie Blogarooskie</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>Drewskiwooskie Blogarooskie</li>
+          <li><a href="mailto:"></a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text"></p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-59814142-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </body>
+
+</html>
