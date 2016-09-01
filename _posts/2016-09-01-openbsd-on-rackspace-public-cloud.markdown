@@ -4,7 +4,6 @@ title:  "Installing OpenBSD On Rackspace Public Cloud"
 date:   2016-01-19 05:35:48
 categories: openbsd rackspace public cloud linux
 ---
-For the longest time, I wanted to see FreeBSD on Rackspace Public Cloud. We finally saw it, with FreeBSD 10.
 For the longest time I wanted to see OpenBSD on Rackspace Public Cloud. With their boot.iso you are able to
 attempt to boot into a pxe environment and boot OpenBSD 5.7, but it lacks the necessary drivers for xen.
 I gave up for a while. but tried with the release of OpenBSD 6. I am happy to report, that you CAN and it WORKS!

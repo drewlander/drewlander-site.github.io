@@ -5,14 +5,13 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 01 Sep 2016 13:41:30 -0400</pubDate>
-    <lastBuildDate>Thu, 01 Sep 2016 13:41:30 -0400</lastBuildDate>
+    <pubDate>Thu, 01 Sep 2016 15:55:21 -0400</pubDate>
+    <lastBuildDate>Thu, 01 Sep 2016 15:55:21 -0400</lastBuildDate>
     <generator>Jekyll v3.2.0</generator>
     
       <item>
         <title>Installing OpenBSD On Rackspace Public Cloud</title>
-        <description>&lt;p&gt;For the longest time, I wanted to see FreeBSD on Rackspace Public Cloud. We finally saw it, with FreeBSD 10.
-For the longest time I wanted to see OpenBSD on Rackspace Public Cloud. With their boot.iso you are able to
+        <description>&lt;p&gt;For the longest time I wanted to see OpenBSD on Rackspace Public Cloud. With their boot.iso you are able to
 attempt to boot into a pxe environment and boot OpenBSD 5.7, but it lacks the necessary drivers for xen.
 I gave up for a while. but tried with the release of OpenBSD 6. I am happy to report, that you CAN and it WORKS!
 To do so, you boot into a linux distro, download bsd.rd, add it to grub, and boot off the RAM disk. Things to note:&lt;/p&gt;
