@@ -5,8 +5,8 @@
     <description></description>
     <link>/</link>
     <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Thu, 01 Sep 2016 15:55:21 -0400</pubDate>
-    <lastBuildDate>Thu, 01 Sep 2016 15:55:21 -0400</lastBuildDate>
+    <pubDate>Mon, 12 Sep 2016 08:57:37 -0400</pubDate>
+    <lastBuildDate>Mon, 12 Sep 2016 08:57:37 -0400</lastBuildDate>
     <generator>Jekyll v3.2.0</generator>
     
       <item>
@@ -383,29 +383,33 @@ I wanted a way to help the lazy people out there setup a centos 7 box with postf
     
       <item>
         <title>Active Directory Password Export Service Silent Install</title>
-        <description>Password Export Service allows you to export users and passwords from one active
+        <description>&lt;p&gt;Password Export Service allows you to export users and passwords from one active
 directory domain to another. All the guides I found show how to install it graphically. It took a bit but eventually I was able to install the service
-AND import the key created with ADMT all automatically. I used chef but any automation tool will work. It did require some hacking.
+AND import the key created with ADMT all automatically. I used chef but any automation tool will work. It did require some hacking.&lt;/p&gt;
 
-You have to edit the password export service yourself via orca, instEd, etc... Something has to alter a datbase table, or else it will ALWAYS prompt and ask if
-you who you want to run the service as. You have to edit under InstallExecuteSequence:
+&lt;p&gt;You have to edit the password export service yourself via orca, instEd, etc… Something has to alter a datbase table, or else it will ALWAYS prompt and ask if
+you who you want to run the service as. You have to edit under InstallExecuteSequence:&lt;/p&gt;
 &lt;pre&gt;
 StartCredentials 0=1
 &lt;/pre&gt;
-Then you can use this msi (or save a transform) and it will no longer prompt as a user to login as.
+&lt;p&gt;Then you can use this msi (or save a transform) and it will no longer prompt as a user to login as.&lt;/p&gt;
 
-Run the following
+&lt;p&gt;Run the following&lt;/p&gt;
+
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;msiexec /i &lt;span class=&quot;s2&quot;&gt;&quot;c:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\p&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;assword_export_server.msi&quot;&lt;/span&gt; /l&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;v &lt;span class=&quot;s2&quot;&gt;&quot;c:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\i&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;nstall.log&quot;&lt;/span&gt; /qn &lt;span class=&quot;nv&quot;&gt;REBOOT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ReallySuppress&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;SENCRYPTIONFILEPATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;c:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\k&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;ey.pes&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;sKeyPassword&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;password&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;sConfPassword&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;password&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-Though, you really do not need anything after REBOOT. It will NOT import any key at all. Also, you have to reboot anyway to get the service to start properly, otherwise
+
+&lt;p&gt;Though, you really do not need anything after REBOOT. It will NOT import any key at all. Also, you have to reboot anyway to get the service to start properly, otherwise
 you will get RPC errors connecting from the destination domain. After you install the service, reboot, then start the Password Export Service. Then run the following
-to actually have the key imported:
+to actually have the key imported:&lt;/p&gt;
+
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&quot;C:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\W&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;indows&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\s&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;ystem32&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\P&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;esKey.exe C:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\k&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;ey.pes &quot;&lt;/span&gt;password&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-Now ADMT _should_ let you migrate the user, and you can do it all automatically. Yay!
+
+&lt;p&gt;Now ADMT &lt;em&gt;should&lt;/em&gt; let you migrate the user, and you can do it all automatically. Yay!&lt;/p&gt;
 
 </description>
         <pubDate>Mon, 19 Oct 2015 04:00:48 -0400</pubDate>
-        <link>/active/directory/password/export/service/automatic/silent/installation/install/2015/10/19/password-export-service-silent-install.markdwn</link>
-        <guid isPermaLink="true">/active/directory/password/export/service/automatic/silent/installation/install/2015/10/19/password-export-service-silent-install.markdwn</guid>
+        <link>/active/directory/password/export/service/automatic/silent/installation/install/2015/10/19/password-export-service-silent-install.html</link>
+        <guid isPermaLink="true">/active/directory/password/export/service/automatic/silent/installation/install/2015/10/19/password-export-service-silent-install.html</guid>
         
         
         <category>active</category>
