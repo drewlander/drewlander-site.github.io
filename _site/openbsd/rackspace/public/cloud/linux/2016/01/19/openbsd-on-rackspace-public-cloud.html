@@ -10,7 +10,7 @@
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/openbsd/rackspace/public/cloud/linux/2016/01/19/openbsd-on-rackspace-public-cloud.html">
+    <link rel="canonical" href="http://localhost:4000/openbsd/rackspace/public/cloud/linux/2016/01/19/openbsd-on-rackspace-public-cloud.html">
 </head>
 
 
@@ -102,10 +102,10 @@ mv bsd.rd /openbsd.rd</code></pre></figure>
   <li>I remove extlinux and use grub2, because reasons (I like grub2)</li>
 </ul>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">dnf -y remove syslinux-extlinux
-rm -f /boot/extlinux.conf
-dnf -y install grubby grub2
-grub2-mkconfig -o /boot/grub2/grub.cfg</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">dnf <span class="nt">-y</span> remove syslinux-extlinux
+rm <span class="nt">-f</span> /boot/extlinux.conf
+dnf <span class="nt">-y</span> install grubby grub2
+grub2-mkconfig <span class="nt">-o</span> /boot/grub2/grub.cfg</code></pre></figure>
 
 <ul>
   <li>Issue the fantastical “reboot” command. It makes the unicorns appear</li>
@@ -115,7 +115,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg</code></pre></figure>
   <li>default keyboard is fine</li>
   <li>set your hostname</li>
   <li>xnf0 will correspond to eth0 settings (public interface). Configure that interface
-<img src="/assets/openbsd_network.png" alt="OpenBSD network config" /></li>
+<img src="http://localhost:4000/assets/openbsd_network.png" alt="OpenBSD network config" /></li>
   <li>enter the ip address and netmask. You can enter in your ipv6 info if you feel you can not typo anything (copy/paste does NOT work for me in this virtual console java session)</li>
   <li>choose done (you can configure xnf1 later)</li>
   <li>enter in your default route (gateway)</li>
@@ -125,7 +125,7 @@ grub2-mkconfig -o /boot/grub2/grub.cfg</code></pre></figure>
   <li>I did the auto layout</li>
   <li>for name(s) sets, I did not do anything with X (use - to deselect). Choose done when done</li>
   <li>reboot and enjoy your new system!
-<img src="/assets/openbsd_complete.png" alt="OpenBSD complete" /></li>
+<img src="http://localhost:4000/assets/openbsd_complete.png" alt="OpenBSD complete" /></li>
 </ul>
 
 

@@ -10,7 +10,7 @@
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html">
+    <link rel="canonical" href="http://localhost:4000/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html">
 </head>
 
 
@@ -77,10 +77,10 @@ the amount of false positives of mail identified as spam.</p>
 that they are getting a ton of spam. Spamassassin needs tuned, and tuning is quite
 easy. The quick and easy way is with sa-learn.</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sa-learn --ham --username<span class="o">=</span>vscan  --nosync /path/to/maildir/directory/cur
-sa-learn --sync
-sa-learn --spam --nosync --username<span class="o">=</span>vscan /path/to/maildir/directory/.Junk/cur
-sa-learn --sync</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sa-learn <span class="nt">--ham</span> <span class="nt">--username</span><span class="o">=</span>vscan  <span class="nt">--nosync</span> /path/to/maildir/directory/cur
+sa-learn <span class="nt">--sync</span>
+sa-learn <span class="nt">--spam</span> <span class="nt">--nosync</span> <span class="nt">--username</span><span class="o">=</span>vscan /path/to/maildir/directory/.Junk/cur
+sa-learn <span class="nt">--sync</span></code></pre></figure>
 
 <p>You MUST train both ham and spam to be effective.  I have to use the vscan user, as I run amavis. sa-learn will add the bayesian 
 tokens to the datbase of the user executing spamassassin.</p>
@@ -88,7 +88,7 @@ tokens to the datbase of the user executing spamassassin.</p>
 <p>A nice thing to do is to report mail that you have found to be spam. If you have installed the Razmor moudle, it can be reported to 
 Vipul’s Razor. Assuming in a folder that is full of spam:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">for </span>i <span class="k">in</span> <span class="sb">`</span>ls<span class="sb">`</span>; <span class="k">do </span>spamassassin -r &lt; <span class="nv">$i</span>; <span class="k">done</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="k">for </span>i <span class="k">in</span> <span class="sb">`</span><span class="nb">ls</span><span class="sb">`</span><span class="p">;</span> <span class="k">do </span>spamassassin <span class="nt">-r</span> &lt; <span class="nv">$i</span><span class="p">;</span> <span class="k">done</span></code></pre></figure>
 
 <p><a href="http://wiki.apache.org/spamassassin/report_spam.pl">This</a> perl script can be run as a cron job. Just point it to a folder that contains only spam.</p>
 
