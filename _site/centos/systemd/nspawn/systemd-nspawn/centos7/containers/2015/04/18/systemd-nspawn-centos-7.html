@@ -10,7 +10,7 @@
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="http://localhost:4000/centos/systemd/nspawn/systemd-nspawn/centos7/containers/2015/04/18/systemd-nspawn-centos-7.html">
+    <link rel="canonical" href="http://0.0.0.0:4000/centos/systemd/nspawn/systemd-nspawn/centos7/containers/2015/04/18/systemd-nspawn-centos-7.html">
 </head>
 
 
@@ -77,7 +77,7 @@ and older verson of systemd-nspawn/machinectl so some features are missing in th
 
 <h3> Create a basic centos 7 bootstrap</h3>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">yum <span class="nt">-y</span> <span class="nt">--releasever</span><span class="o">=</span>7 <span class="nt">--nogpg</span> <span class="nt">--installroot</span><span class="o">=</span>/srv/yaystuff install systemd passwd yum fedora-release vim-minimal</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">yum <span class="nt">-y</span> <span class="nt">--releasever</span><span class="o">=</span>7 <span class="nt">--nogpg</span> <span class="nt">--installroot</span><span class="o">=</span>/srv/yaystuff <span class="nb">install </span>systemd passwd yum fedora-release vim-minimal</code></pre></figure>
 
 <p>This will install a basic bootstrap centos 7 environment</p>
 <h3> Reset the password in the container </h3>

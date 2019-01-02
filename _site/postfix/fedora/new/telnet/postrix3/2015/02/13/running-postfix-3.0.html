@@ -10,7 +10,7 @@
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="http://localhost:4000/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3.0.html">
+    <link rel="canonical" href="http://0.0.0.0:4000/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3.0.html">
 </head>
 
 
@@ -74,7 +74,7 @@ wget ftp://postfix.mirrors.pair.com/postfix-release/official/postfix-3.0.0.tar.g
 <span class="nb">tar</span> <span class="nt">-xzvf</span> postfix-3.0.0.tar.gz
 <span class="nb">cd </span>postfix-3.0.0</code></pre></figure>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">yum <span class="nt">-y</span> install mysql-devel openssl-devel libdb-devel libgsasl-devel
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">yum <span class="nt">-y</span> <span class="nb">install </span>mysql-devel openssl-devel libdb-devel libgsasl-devel
 yum groupinstall <span class="nt">-y</span> <span class="s2">"Development Tools"</span></code></pre></figure>
 
 <p>I put the following in a file so I could keep building it until I got all the right libs/deps</p>
@@ -84,9 +84,9 @@ yum groupinstall <span class="nt">-y</span> <span class="s2">"Development Tools"
 make <span class="nt">-f</span> Makefile.init makefiles <span class="s1">'CCARGS=-DHAS_MYSQL -I/usr/include/mysql\
 -DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\"dovecot\"\
 -DUSE_TLS `pkg-config --cflags openssl`'</span>  <span class="s1">'AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm'</span> <span class="s1">'AUXLIBS=-L/usr/lib64\
--lssl -lcrypto'</span>  <span class="nv">shared</span><span class="o">=</span>yes <span class="nv">dynamicmaps</span><span class="o">=</span>yes
-make
-make install</code></pre></figure>
+-lssl -lcrypto'</span>  <span class="nv">shared</span><span class="o">=</span><span class="nb">yes </span><span class="nv">dynamicmaps</span><span class="o">=</span><span class="nb">yes
+</span>make
+make <span class="nb">install</span></code></pre></figure>
 
 <p>For the install part, I used the default paths given.</p>
 
@@ -110,7 +110,7 @@ openssl-devel</code></pre></figure>
 
 <p>The nice thing too is that when I did a yum -y remove postfix, it left my main.cf intact, just saved it as main.cf.rpmsave. So before starting postfix don’t foget to do:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">cp /etc/postfix/main.cf.rpmsave /etc/postfix/main.cf</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cp</span> /etc/postfix/main.cf.rpmsave /etc/postfix/main.cf</code></pre></figure>
 
 <p>Also, I left backwards compatability on with postfix, have not tried turning it off. When I do, I will take note of what I had and what needed to be changed.</p>
 

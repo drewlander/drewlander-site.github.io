@@ -10,7 +10,7 @@
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="http://localhost:4000/aws/api/gateway/chalice/sqs/celery/python/lambda/linux/2018/01/31/aws-api-lambda-sqs-celery.html">
+    <link rel="canonical" href="http://0.0.0.0:4000/aws/api/gateway/chalice/sqs/celery/python/lambda/linux/2018/01/30/aws-api-lambda-sqs-celery.html">
 </head>
 
 
@@ -63,7 +63,7 @@
 
   <header class="post-header">
     <h1 class="post-title">Setting up AWS API Gateway using Chalice, SQS and Celery</h1>
-    <p class="post-meta">Jan 31, 2018</p>
+    <p class="post-meta">Jan 30, 2018</p>
   </header>
 
   <article class="post-content">
@@ -87,12 +87,12 @@
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">python3.6 <span class="nt">-m</span> venv chalice-demo
 <span class="nb">cd </span>chalice-demo
 <span class="nb">.</span> ./bin/actiavate
-pip install <span class="nv">chalice</span><span class="o">==</span>1.1.0
-pip install <span class="nv">celery</span><span class="o">==</span>4.1.0</code></pre></figure>
+pip <span class="nb">install </span><span class="nv">chalice</span><span class="o">==</span>1.1.0
+pip <span class="nb">install </span><span class="nv">celery</span><span class="o">==</span>4.1.0</code></pre></figure>
 
 <p>Since Chalice is for Amazon, you need to setup your Amazon credentials</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>mkdir ~/.aws
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span><span class="nb">mkdir</span> ~/.aws
 <span class="nv">$ </span><span class="nb">cat</span> <span class="o">&gt;&gt;</span> ~/.aws/config
 <span class="o">[</span>default]
 <span class="nv">aws_access_key_id</span><span class="o">=</span>YOUR_ACCESS_KEY_HERE
@@ -116,16 +116,16 @@ pip install <span class="nv">celery</span><span class="o">==</span>4.1.0</code><
 
 <span class="n">authorizer</span> <span class="o">=</span> <span class="n">IAMAuthorizer</span><span class="p">()</span>
 
-<span class="nd">@app.route</span><span class="p">(</span><span class="s">'/'</span><span class="p">,</span> <span class="n">api_key_required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">authorizer</span><span class="o">=</span><span class="n">authorizer</span><span class="p">)</span>
+<span class="o">@</span><span class="n">app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s">'/'</span><span class="p">,</span> <span class="n">api_key_required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">authorizer</span><span class="o">=</span><span class="n">authorizer</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
     <span class="k">return</span> <span class="p">{</span><span class="s">'hello'</span><span class="p">:</span> <span class="s">'world'</span><span class="p">}</span>
 
-<span class="nd">@app.route</span><span class="p">(</span><span class="s">'/sendtosns'</span><span class="p">,</span> <span class="n">api_key_required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">authorizer</span><span class="o">=</span><span class="n">authorizer</span><span class="p">)</span>
+<span class="o">@</span><span class="n">app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s">'/sendtosns'</span><span class="p">,</span> <span class="n">api_key_required</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">authorizer</span><span class="o">=</span><span class="n">authorizer</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">sendto_sqs</span><span class="p">():</span>
 
     <span class="n">sqs</span> <span class="o">=</span> <span class="n">boto3</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s">'sqs'</span><span class="p">)</span>
-    <span class="c"># assuming you are using a fifo queue</span>
-    <span class="n">queue_url</span> <span class="o">=</span> <span class="s">'https://sqs.us-east-1.amazonaws.com/&lt;aws account id&gt;/&lt;queue name&gt;.fifo'</span>
+    <span class="c1"># assuming you are using a fifo queue
+</span>    <span class="n">queue_url</span> <span class="o">=</span> <span class="s">'https://sqs.us-east-1.amazonaws.com/&lt;aws account id&gt;/&lt;queue name&gt;.fifo'</span>
     
     <span class="k">try</span><span class="p">:</span>
         <span class="n">celery</span><span class="o">=</span><span class="n">Celery</span><span class="p">(</span><span class="n">broker</span><span class="o">=</span><span class="n">broker_url</span><span class="p">)</span>
@@ -193,8 +193,8 @@ pip install <span class="nv">celery</span><span class="o">==</span>4.1.0</code><
 
 <p>There, now you have an api key to hit this API. We also chose IAM authentication. That means we have to use AWS Signature Version 4 singing. Don’t worry, smart people already made a python module for this.</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install aws-requests-auth<span class="o">==</span>0.4.1
-pip install <span class="nv">requests</span><span class="o">==</span>2.18.4</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip <span class="nb">install </span>aws-requests-auth<span class="o">==</span>0.4.1
+pip <span class="nb">install </span><span class="nv">requests</span><span class="o">==</span>2.18.4</code></pre></figure>
 
 <p>And then to test the api, we have this snazzy little python program. Let’s name is snazzy.py</p>
 
@@ -275,10 +275,10 @@ If all goes well, there should be no errors, and now your application is logging
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">python3.6 <span class="nt">-m</span> venv workers
 <span class="nb">cd </span>workers
 <span class="nb">.</span> ./bin/activate
-pip install <span class="nv">celery</span><span class="o">==</span>4.1.0
+pip <span class="nb">install </span><span class="nv">celery</span><span class="o">==</span>4.1.0
 <span class="nb">export </span><span class="nv">PYCURL_SSL_LIBRARY</span><span class="o">=</span>nss
-pip install pycurl <span class="nt">--no-cache-dir</span>
-pip install pycurl</code></pre></figure>
+pip <span class="nb">install </span>pycurl <span class="nt">--no-cache-dir</span>
+pip <span class="nb">install </span>pycurl</code></pre></figure>
 
 <ul>
   <li>NOTE: there may be funny things with pycurl. This is the worst part of everything. YMMV, may have to use google to figure out why it wont install. Again, so stupid.</li>
@@ -301,11 +301,11 @@ pip install pycurl</code></pre></figure>
                 <span class="n">CELERY_RESULT_SERIALIZER</span><span class="o">=</span><span class="s">"json"</span><span class="p">,</span>
                 <span class="n">CELERY_DEFAULT_QUEUE</span><span class="o">=</span><span class="s">'&lt;queue_name&gt;.fifo'</span><span class="p">)</span>
 
-<span class="nd">@app.task</span><span class="p">(</span><span class="n">serializer</span><span class="o">=</span><span class="s">'json'</span><span class="p">)</span>
+<span class="o">@</span><span class="n">app</span><span class="o">.</span><span class="n">task</span><span class="p">(</span><span class="n">serializer</span><span class="o">=</span><span class="s">'json'</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">message</span><span class="p">,</span><span class="n">duo</span><span class="p">):</span>
     <span class="n">my_uuid</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span>
     <span class="n">sleep_time</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
-    <span class="k">print</span><span class="p">(</span><span class="s">'I got a task, and my uuid is: {} and I am sleeping {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">my_uuid</span><span class="p">,</span> <span class="n">sleep_time</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'I got a task, and my uuid is: {} and I am sleeping {}'</span><span class="o">.</span><span class="nb">format</span><span class="p">(</span><span class="n">my_uuid</span><span class="p">,</span> <span class="n">sleep_time</span><span class="p">))</span>
     <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">sleep_time</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="s">"My uuuid is </span><span class="si">%</span><span class="s">s and I am done sleeping"</span> <span class="o">%</span> <span class="n">my_uuid</span><span class="p">)</span>
     <span class="k">print</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>

@@ -3,11 +3,11 @@
   <channel>
     <title>Drewskiwooskie Blogarooskie</title>
     <description></description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 31 Jan 2018 11:25:42 -0500</pubDate>
-    <lastBuildDate>Wed, 31 Jan 2018 11:25:42 -0500</lastBuildDate>
-    <generator>Jekyll v3.6.0</generator>
+    <link>http://0.0.0.0:4000/</link>
+    <atom:link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Wed, 02 Jan 2019 09:12:00 -0600</pubDate>
+    <lastBuildDate>Wed, 02 Jan 2019 09:12:00 -0600</lastBuildDate>
+    <generator>Jekyll v3.8.5</generator>
     
       <item>
         <title>Setting up AWS API Gateway using Chalice, SQS and Celery</title>
@@ -31,12 +31,12 @@
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;python3.6 &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; venv chalice-demo
 &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;chalice-demo
 &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; ./bin/actiavate
-pip install &lt;span class=&quot;nv&quot;&gt;chalice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;1.1.0
-pip install &lt;span class=&quot;nv&quot;&gt;celery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;4.1.0&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;chalice&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;1.1.0
+pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;celery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;4.1.0&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Since Chalice is for Amazon, you need to setup your Amazon credentials&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;mkdir ~/.aws
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;mkdir&lt;/span&gt; ~/.aws
 &lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; ~/.aws/config
 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;default]
 &lt;span class=&quot;nv&quot;&gt;aws_access_key_id&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;YOUR_ACCESS_KEY_HERE
@@ -60,16 +60,16 @@ pip install &lt;span class=&quot;nv&quot;&gt;celery&lt;/span&gt;&lt;span class=&
 
 &lt;span class=&quot;n&quot;&gt;authorizer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IAMAuthorizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
 
-&lt;span class=&quot;nd&quot;&gt;@app.route&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;api_key_required&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authorizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;api_key_required&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authorizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'hello'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'world'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 
-&lt;span class=&quot;nd&quot;&gt;@app.route&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/sendtosns'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;api_key_required&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authorizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;route&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'/sendtosns'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;api_key_required&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;True&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;authorizer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;authorizer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;sendto_sqs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt;
 
     &lt;span class=&quot;n&quot;&gt;sqs&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;boto3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resource&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'sqs'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;c&quot;&gt;# assuming you are using a fifo queue&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;queue_url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'https://sqs.us-east-1.amazonaws.com/&amp;lt;aws account id&amp;gt;/&amp;lt;queue name&amp;gt;.fifo'&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;# assuming you are using a fifo queue
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;queue_url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'https://sqs.us-east-1.amazonaws.com/&amp;lt;aws account id&amp;gt;/&amp;lt;queue name&amp;gt;.fifo'&lt;/span&gt;
     
     &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
         &lt;span class=&quot;n&quot;&gt;celery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Celery&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;broker&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;broker_url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -137,8 +137,8 @@ pip install &lt;span class=&quot;nv&quot;&gt;celery&lt;/span&gt;&lt;span class=&
 
 &lt;p&gt;There, now you have an api key to hit this API. We also chose IAM authentication. That means we have to use AWS Signature Version 4 singing. Don’t worry, smart people already made a python module for this.&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;pip install aws-requests-auth&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;0.4.1
-pip install &lt;span class=&quot;nv&quot;&gt;requests&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;2.18.4&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;aws-requests-auth&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;0.4.1
+pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;requests&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;2.18.4&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;And then to test the api, we have this snazzy little python program. Let’s name is snazzy.py&lt;/p&gt;
 
@@ -219,10 +219,10 @@ If all goes well, there should be no errors, and now your application is logging
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;python3.6 &lt;span class=&quot;nt&quot;&gt;-m&lt;/span&gt; venv workers
 &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;workers
 &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt; ./bin/activate
-pip install &lt;span class=&quot;nv&quot;&gt;celery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;4.1.0
+pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;celery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;==&lt;/span&gt;4.1.0
 &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PYCURL_SSL_LIBRARY&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;nss
-pip install pycurl &lt;span class=&quot;nt&quot;&gt;--no-cache-dir&lt;/span&gt;
-pip install pycurl&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;pycurl &lt;span class=&quot;nt&quot;&gt;--no-cache-dir&lt;/span&gt;
+pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;pycurl&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;ul&gt;
   &lt;li&gt;NOTE: there may be funny things with pycurl. This is the worst part of everything. YMMV, may have to use google to figure out why it wont install. Again, so stupid.&lt;/li&gt;
@@ -245,11 +245,11 @@ pip install pycurl&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
                 &lt;span class=&quot;n&quot;&gt;CELERY_RESULT_SERIALIZER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;json&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
                 &lt;span class=&quot;n&quot;&gt;CELERY_DEFAULT_QUEUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'&amp;lt;queue_name&amp;gt;.fifo'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 
-&lt;span class=&quot;nd&quot;&gt;@app.task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;serializer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'json'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;serializer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'json'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;duo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;my_uuid&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;uuid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;uuid4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;sleep_time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;random&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;randint&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'I got a task, and my uuid is: {} and I am sleeping {}'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;my_uuid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sleep_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'I got a task, and my uuid is: {} and I am sleeping {}'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;my_uuid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sleep_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sleep_time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;My uuuid is &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;s and I am done sleeping&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;%&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;my_uuid&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
@@ -335,9 +335,9 @@ pip install pycurl&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
   &lt;li&gt;This user could only hit the sendtosns endpoint using Get.&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Wed, 31 Jan 2018 00:35:48 -0500</pubDate>
-        <link>http://localhost:4000/aws/api/gateway/chalice/sqs/celery/python/lambda/linux/2018/01/31/aws-api-lambda-sqs-celery.html</link>
-        <guid isPermaLink="true">http://localhost:4000/aws/api/gateway/chalice/sqs/celery/python/lambda/linux/2018/01/31/aws-api-lambda-sqs-celery.html</guid>
+        <pubDate>Tue, 30 Jan 2018 23:35:48 -0600</pubDate>
+        <link>http://0.0.0.0:4000/aws/api/gateway/chalice/sqs/celery/python/lambda/linux/2018/01/30/aws-api-lambda-sqs-celery.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/aws/api/gateway/chalice/sqs/celery/python/lambda/linux/2018/01/30/aws-api-lambda-sqs-celery.html</guid>
         
         
         <category>aws</category>
@@ -381,7 +381,7 @@ To do so, you boot into a linux distro, download bsd.rd, add it to grub, and boo
 &lt;/ul&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;wget http://ftp.openbsd.org/pub/OpenBSD/6.0/amd64/bsd.rd 
-mv bsd.rd /openbsd.rd&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;span class=&quot;nb&quot;&gt;mv &lt;/span&gt;bsd.rd /openbsd.rd&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Modify /etc/grub.d/40_custom and add:&lt;/li&gt;
@@ -398,8 +398,8 @@ mv bsd.rd /openbsd.rd&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;/ul&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;dnf &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; remove syslinux-extlinux
-rm &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; /boot/extlinux.conf
-dnf &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; install grubby grub2
+&lt;span class=&quot;nb&quot;&gt;rm&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; /boot/extlinux.conf
+dnf &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;grubby grub2
 grub2-mkconfig &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; /boot/grub2/grub.cfg&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;ul&gt;
@@ -410,7 +410,7 @@ grub2-mkconfig &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; /boot/grub2/grub
   &lt;li&gt;default keyboard is fine&lt;/li&gt;
   &lt;li&gt;set your hostname&lt;/li&gt;
   &lt;li&gt;xnf0 will correspond to eth0 settings (public interface). Configure that interface
-&lt;img src=&quot;http://localhost:4000/assets/openbsd_network.png&quot; alt=&quot;OpenBSD network config&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;http://0.0.0.0:4000/assets/openbsd_network.png&quot; alt=&quot;OpenBSD network config&quot; /&gt;&lt;/li&gt;
   &lt;li&gt;enter the ip address and netmask. You can enter in your ipv6 info if you feel you can not typo anything (copy/paste does NOT work for me in this virtual console java session)&lt;/li&gt;
   &lt;li&gt;choose done (you can configure xnf1 later)&lt;/li&gt;
   &lt;li&gt;enter in your default route (gateway)&lt;/li&gt;
@@ -420,13 +420,13 @@ grub2-mkconfig &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; /boot/grub2/grub
   &lt;li&gt;I did the auto layout&lt;/li&gt;
   &lt;li&gt;for name(s) sets, I did not do anything with X (use - to deselect). Choose done when done&lt;/li&gt;
   &lt;li&gt;reboot and enjoy your new system!
-&lt;img src=&quot;http://localhost:4000/assets/openbsd_complete.png&quot; alt=&quot;OpenBSD complete&quot; /&gt;&lt;/li&gt;
+&lt;img src=&quot;http://0.0.0.0:4000/assets/openbsd_complete.png&quot; alt=&quot;OpenBSD complete&quot; /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 </description>
-        <pubDate>Tue, 19 Jan 2016 00:35:48 -0500</pubDate>
-        <link>http://localhost:4000/openbsd/rackspace/public/cloud/linux/2016/01/19/openbsd-on-rackspace-public-cloud.html</link>
-        <guid isPermaLink="true">http://localhost:4000/openbsd/rackspace/public/cloud/linux/2016/01/19/openbsd-on-rackspace-public-cloud.html</guid>
+        <pubDate>Mon, 18 Jan 2016 23:35:48 -0600</pubDate>
+        <link>http://0.0.0.0:4000/openbsd/rackspace/public/cloud/linux/2016/01/18/openbsd-on-rackspace-public-cloud.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/openbsd/rackspace/public/cloud/linux/2016/01/18/openbsd-on-rackspace-public-cloud.html</guid>
         
         
         <category>openbsd</category>
@@ -638,9 +638,9 @@ grub2-mkconfig &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; /boot/grub2/grub
 &lt;span class=&quot;c1&quot;&gt;# puts chef.post_request('/organizations', {&quot;name&quot; =&amp;gt; &quot;secure&quot;, &quot;full_name&quot; =&amp;gt; 'secure test1'}.to_json)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 </description>
-        <pubDate>Tue, 19 Jan 2016 00:35:48 -0500</pubDate>
-        <link>http://localhost:4000/chef/ruby/rest/httparty/raw/api/2016/01/19/query-chef-rest-api.html</link>
-        <guid isPermaLink="true">http://localhost:4000/chef/ruby/rest/httparty/raw/api/2016/01/19/query-chef-rest-api.html</guid>
+        <pubDate>Mon, 18 Jan 2016 23:35:48 -0600</pubDate>
+        <link>http://0.0.0.0:4000/chef/ruby/rest/httparty/raw/api/2016/01/18/query-chef-rest-api.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/chef/ruby/rest/httparty/raw/api/2016/01/18/query-chef-rest-api.html</guid>
         
         
         <category>chef</category>
@@ -699,9 +699,9 @@ I wanted a way to help the lazy people out there setup a centos 7 box with postf
   &lt;li&gt;Clean up recipes (single responsibility)&lt;/li&gt;
 &lt;/ul&gt;
 </description>
-        <pubDate>Mon, 19 Oct 2015 04:00:48 -0400</pubDate>
-        <link>http://localhost:4000/centos/postfix/dovecot/dkim/spamasassain/clamav/postfixadmin/chef/chef-solo/selinux/postgrey/postgrey-milter/mariadb/2015/10/19/centos-mailonacircle.html</link>
-        <guid isPermaLink="true">http://localhost:4000/centos/postfix/dovecot/dkim/spamasassain/clamav/postfixadmin/chef/chef-solo/selinux/postgrey/postgrey-milter/mariadb/2015/10/19/centos-mailonacircle.html</guid>
+        <pubDate>Mon, 19 Oct 2015 03:00:48 -0500</pubDate>
+        <link>http://0.0.0.0:4000/centos/postfix/dovecot/dkim/spamasassain/clamav/postfixadmin/chef/chef-solo/selinux/postgrey/postgrey-milter/mariadb/2015/10/19/centos-mailonacircle.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/centos/postfix/dovecot/dkim/spamasassain/clamav/postfixadmin/chef/chef-solo/selinux/postgrey/postgrey-milter/mariadb/2015/10/19/centos-mailonacircle.html</guid>
         
         
         <category>centos</category>
@@ -758,9 +758,9 @@ to actually have the key imported:&lt;/p&gt;
 &lt;p&gt;Now ADMT &lt;em&gt;should&lt;/em&gt; let you migrate the user, and you can do it all automatically. Yay!&lt;/p&gt;
 
 </description>
-        <pubDate>Mon, 19 Oct 2015 04:00:48 -0400</pubDate>
-        <link>http://localhost:4000/active/directory/password/export/service/automatic/silent/installation/install/2015/10/19/password-export-service-silent-install.html</link>
-        <guid isPermaLink="true">http://localhost:4000/active/directory/password/export/service/automatic/silent/installation/install/2015/10/19/password-export-service-silent-install.html</guid>
+        <pubDate>Mon, 19 Oct 2015 03:00:48 -0500</pubDate>
+        <link>http://0.0.0.0:4000/active/directory/password/export/service/automatic/silent/installation/install/2015/10/19/password-export-service-silent-install.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/active/directory/password/export/service/automatic/silent/installation/install/2015/10/19/password-export-service-silent-install.html</guid>
         
         
         <category>active</category>
@@ -792,7 +792,7 @@ show how to run Ubuntu (which you can dissect and figure out how to boot other l
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone git@github.com:mist64/xhyve.git
 &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;hyve
 make
-mkdir freebsd
+&lt;span class=&quot;nb&quot;&gt;mkdir &lt;/span&gt;freebsd
 &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;freebsd&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h3&gt; Download latest FreeBSD virtual machine image&lt;/h3&gt;
@@ -831,9 +831,9 @@ build/xhyve $ACPI $MEM $SMP $PCI_DEV $LPC_DEV $NET $IMG_CD $IMG_HDD $UUID -f fbs
 Stuck with ~20GB box but hey, its freebsd w/xhve!
 &lt;/h3&gt;&lt;/h3&gt;
 </description>
-        <pubDate>Sat, 18 Apr 2015 04:00:48 -0400</pubDate>
-        <link>http://localhost:4000/xhyve/freebsd/2015/04/18/xhyve-freebsd.html</link>
-        <guid isPermaLink="true">http://localhost:4000/xhyve/freebsd/2015/04/18/xhyve-freebsd.html</guid>
+        <pubDate>Sat, 18 Apr 2015 03:00:48 -0500</pubDate>
+        <link>http://0.0.0.0:4000/xhyve/freebsd/2015/04/18/xhyve-freebsd.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/xhyve/freebsd/2015/04/18/xhyve-freebsd.html</guid>
         
         
         <category>xhyve</category>
@@ -854,7 +854,7 @@ and older verson of systemd-nspawn/machinectl so some features are missing in th
 
 &lt;h3&gt; Create a basic centos 7 bootstrap&lt;/h3&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;yum &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--releasever&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;7 &lt;span class=&quot;nt&quot;&gt;--nogpg&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--installroot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/srv/yaystuff install systemd passwd yum fedora-release vim-minimal&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;yum &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--releasever&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;7 &lt;span class=&quot;nt&quot;&gt;--nogpg&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--installroot&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/srv/yaystuff &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;systemd passwd yum fedora-release vim-minimal&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;This will install a basic bootstrap centos 7 environment&lt;/p&gt;
 &lt;h3&gt; Reset the password in the container &lt;/h3&gt;
@@ -933,9 +933,9 @@ Debian GNU/Linux stretch/sid drewstud.com pts/0
 drewstud login: &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 </description>
-        <pubDate>Sat, 18 Apr 2015 04:00:48 -0400</pubDate>
-        <link>http://localhost:4000/centos/systemd/nspawn/systemd-nspawn/centos7/containers/2015/04/18/systemd-nspawn-centos-7.html</link>
-        <guid isPermaLink="true">http://localhost:4000/centos/systemd/nspawn/systemd-nspawn/centos7/containers/2015/04/18/systemd-nspawn-centos-7.html</guid>
+        <pubDate>Sat, 18 Apr 2015 03:00:48 -0500</pubDate>
+        <link>http://0.0.0.0:4000/centos/systemd/nspawn/systemd-nspawn/centos7/containers/2015/04/18/systemd-nspawn-centos-7.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/centos/systemd/nspawn/systemd-nspawn/centos7/containers/2015/04/18/systemd-nspawn-centos-7.html</guid>
         
         
         <category>centos</category>
@@ -987,9 +987,9 @@ to my inbox to a trickle.&lt;/p&gt;
 &lt;p&gt;Excellent reference: &lt;a href=&quot;http://www.spamtips.org/p/ultimate-setup-guide.html&quot;&gt;http://www.spamtips.org/p/ultimate-setup-guide.html&lt;/a&gt;&lt;/p&gt;
 
 </description>
-        <pubDate>Fri, 13 Feb 2015 02:35:48 -0500</pubDate>
-        <link>http://localhost:4000/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html</link>
-        <guid isPermaLink="true">http://localhost:4000/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html</guid>
+        <pubDate>Fri, 13 Feb 2015 01:35:48 -0600</pubDate>
+        <link>http://0.0.0.0:4000/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html</guid>
         
         
         <category>postfix</category>
@@ -1011,7 +1011,7 @@ wget ftp://postfix.mirrors.pair.com/postfix-release/official/postfix-3.0.0.tar.g
 &lt;span class=&quot;nb&quot;&gt;tar&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-xzvf&lt;/span&gt; postfix-3.0.0.tar.gz
 &lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;postfix-3.0.0&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;yum &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; install mysql-devel openssl-devel libdb-devel libgsasl-devel
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;yum &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;mysql-devel openssl-devel libdb-devel libgsasl-devel
 yum groupinstall &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Development Tools&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;I put the following in a file so I could keep building it until I got all the right libs/deps&lt;/p&gt;
@@ -1021,9 +1021,9 @@ yum groupinstall &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class
 make &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; Makefile.init makefiles &lt;span class=&quot;s1&quot;&gt;'CCARGS=-DHAS_MYSQL -I/usr/include/mysql\
 -DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\&quot;dovecot\&quot;\
 -DUSE_TLS `pkg-config --cflags openssl`'&lt;/span&gt;  &lt;span class=&quot;s1&quot;&gt;'AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm'&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'AUXLIBS=-L/usr/lib64\
--lssl -lcrypto'&lt;/span&gt;  &lt;span class=&quot;nv&quot;&gt;shared&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yes &lt;span class=&quot;nv&quot;&gt;dynamicmaps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;yes
-make
-make install&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+-lssl -lcrypto'&lt;/span&gt;  &lt;span class=&quot;nv&quot;&gt;shared&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;dynamicmaps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes
+&lt;/span&gt;make
+make &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;For the install part, I used the default paths given.&lt;/p&gt;
 
@@ -1047,15 +1047,15 @@ openssl-devel&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;The nice thing too is that when I did a yum -y remove postfix, it left my main.cf intact, just saved it as main.cf.rpmsave. So before starting postfix don’t foget to do:&lt;/p&gt;
 
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;cp /etc/postfix/main.cf.rpmsave /etc/postfix/main.cf&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; /etc/postfix/main.cf.rpmsave /etc/postfix/main.cf&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Also, I left backwards compatability on with postfix, have not tried turning it off. When I do, I will take note of what I had and what needed to be changed.&lt;/p&gt;
 
 &lt;p&gt;No idea how to do comments yet, so email &lt;a href=&quot;mailto:drewski@drewstud.com&quot;&gt;drewski@drewstud.com&lt;/a&gt; with comments/questions&lt;/p&gt;
 </description>
-        <pubDate>Fri, 13 Feb 2015 02:35:48 -0500</pubDate>
-        <link>http://localhost:4000/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3.0.html</link>
-        <guid isPermaLink="true">http://localhost:4000/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3.0.html</guid>
+        <pubDate>Fri, 13 Feb 2015 01:35:48 -0600</pubDate>
+        <link>http://0.0.0.0:4000/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3.0.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3.0.html</guid>
         
         
         <category>postfix</category>
@@ -1080,9 +1080,9 @@ of people correcting me, which is good, because then I will learn :)
 Yes this blog is using Jekyll. I love doing a git commit and BAM, updated site. 
 Just have a lot to figure out to make it look nice.&lt;/p&gt;
 </description>
-        <pubDate>Thu, 12 Feb 2015 05:35:48 -0500</pubDate>
-        <link>http://localhost:4000/jekyll/update/new/2015/02/12/figuring-this-out.html</link>
-        <guid isPermaLink="true">http://localhost:4000/jekyll/update/new/2015/02/12/figuring-this-out.html</guid>
+        <pubDate>Thu, 12 Feb 2015 04:35:48 -0600</pubDate>
+        <link>http://0.0.0.0:4000/jekyll/update/new/2015/02/12/figuring-this-out.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/new/2015/02/12/figuring-this-out.html</guid>
         
         
         <category>jekyll</category>
