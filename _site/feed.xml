@@ -5,9 +5,52 @@
     <description></description>
     <link>http://0.0.0.0:4000/</link>
     <atom:link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 02 Jan 2019 09:12:00 -0600</pubDate>
-    <lastBuildDate>Wed, 02 Jan 2019 09:12:00 -0600</lastBuildDate>
+    <pubDate>Wed, 02 Jan 2019 09:18:40 -0600</pubDate>
+    <lastBuildDate>Wed, 02 Jan 2019 09:18:40 -0600</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>Streaming Audio from Linux to OSX with Pulseaudio</title>
+        <description>&lt;p&gt;This is not for everyone, and I know that there are better things I can do (like hook up a pair of speakers). Let me explain.&lt;/p&gt;
+
+&lt;p&gt;I have a Fedora box that I use as a home personal server. It runs various services. However because the more monitors the better, and 
+I believe in having as many HUDS and graphs as humanly possible, it IS running X and has a monitor attached to it. I had some music files
+on that server I wanted to play while I was working on my Macbook. I could mount the filesystem from my Macbook and play the file, but what fun is that?
+Instead, why can’t I just tell my computer where to send the audio to and have it work? Turns out, you can!&lt;/p&gt;
+
+&lt;p&gt;Install Pulseaudio on OSX:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;pulseaudio&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;I am assuming X is running and some kind of DE is configured on the Linux box.&lt;/p&gt;
+
+&lt;p&gt;Start Pulseaudio on OSX:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;pulseaudio &lt;span class=&quot;nt&quot;&gt;--load&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;module-native-protocol-tcp &lt;span class=&quot;nt&quot;&gt;--exit-idle-time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-1&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--daemon&lt;/span&gt;
+pactl load-module module-native-protocol-tcp auth-ip-acl&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;lt;ip of streaming client&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Tell Linux where to send the audio:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;PULSE_SERVER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;lt;ip of OSX BOx&amp;gt; vlc &amp;lt;filename&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;PROFIT!&lt;/p&gt;
+</description>
+        <pubDate>Wed, 02 Jan 2019 01:35:48 -0600</pubDate>
+        <link>http://0.0.0.0:4000/linux/fedora/osx/mac/pulseaudio/2019/01/02/stream-audio-linux-to-osx.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/linux/fedora/osx/mac/pulseaudio/2019/01/02/stream-audio-linux-to-osx.html</guid>
+        
+        
+        <category>linux</category>
+        
+        <category>fedora</category>
+        
+        <category>osx</category>
+        
+        <category>mac</category>
+        
+        <category>pulseaudio</category>
+        
+      </item>
     
       <item>
         <title>Setting up AWS API Gateway using Chalice, SQS and Celery</title>
@@ -1067,29 +1110,6 @@ openssl-devel&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
         <category>telnet</category>
         
         <category>postrix3</category>
-        
-      </item>
-    
-      <item>
-        <title>Figuring this jekyll thing out!</title>
-        <description>&lt;p&gt;I have read many places that having a blog is a good thing. Even if you have on there something
-that you think anyone should know, there may be that one person out there who doesn’t know, who
-somehow finds your blog, and you help them. Anyway,
-this will be a technical blog. I am self taught (no collge) so I am sure there will be lots
-of people correcting me, which is good, because then I will learn :)
-Yes this blog is using Jekyll. I love doing a git commit and BAM, updated site. 
-Just have a lot to figure out to make it look nice.&lt;/p&gt;
-</description>
-        <pubDate>Thu, 12 Feb 2015 04:35:48 -0600</pubDate>
-        <link>http://0.0.0.0:4000/jekyll/update/new/2015/02/12/figuring-this-out.html</link>
-        <guid isPermaLink="true">http://0.0.0.0:4000/jekyll/update/new/2015/02/12/figuring-this-out.html</guid>
-        
-        
-        <category>jekyll</category>
-        
-        <category>update</category>
-        
-        <category>new</category>
         
       </item>
     

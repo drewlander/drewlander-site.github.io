@@ -1,6 +1,7 @@
+---
 layout: post
-title:  "Streaming Audio from Linux to OSX with Pulseaudio"
-date:   2019-02-02 7:35:48
+title:  Streaming Audio from Linux to OSX with Pulseaudio
+date:   2019-01-02 7:35:48
 categories: linux fedora osx mac pulseaudio
 ---
 This is not for everyone, and I know that there are better things I can do (like hook up a pair of speakers). Let me explain.
