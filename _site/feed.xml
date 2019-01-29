@@ -5,9 +5,49 @@
     <description></description>
     <link>http://0.0.0.0:4000/</link>
     <atom:link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Wed, 02 Jan 2019 09:18:40 -0600</pubDate>
-    <lastBuildDate>Wed, 02 Jan 2019 09:18:40 -0600</lastBuildDate>
+    <pubDate>Tue, 29 Jan 2019 11:38:14 -0600</pubDate>
+    <lastBuildDate>Tue, 29 Jan 2019 11:38:14 -0600</lastBuildDate>
     <generator>Jekyll v3.8.5</generator>
+    
+      <item>
+        <title>ZFS kmod Does Not Build On Fedora Kernel 4.20.4-200</title>
+        <description>&lt;p&gt;After updating my Fedora box, I noticed that the ZFS kernel module was no longer loaded.
+The error (from /var/lib/dkms/zfs/0.7.12/build/make.log) was:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;/var/lib/dkms/zfs/0.7.12/build/include/zpios-ctl.h:186:11: error: implicit declaration of &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; ‘current_kernel_time’&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; did you mean ‘current_kernel_time64’? &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-Werror&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;implicit-function-declaration]        
+  ts_now &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; current_kernel_time&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;                                                                                                                                                                              
+           ^~~~~~~~~~~~~~~~~~~                                                                                                                                                                                 
+           current_kernel_time64                                                                                                                                                                               
+/var/lib/dkms/zfs/0.7.12/build/include/zpios-ctl.h:186:9: error: incompatible types when assigning to &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; ‘struct timespec’ from &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt; ‘int’                                                                   
+  ts_now &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; current_kernel_time&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;  &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The easiest fix is to:&lt;/p&gt;
+
+&lt;p&gt;Download &lt;a href=&quot;https://mirrors.edge.kernel.org/ubuntu/pool/main/z/zfs-linux/zfs-linux_0.6.5.11-1ubuntu3.6.debian.tar.xz&quot;&gt;zfs-linux_0.6.5.11-1ubuntu3.6.debian.tar.xz &lt;/a&gt;
+extract and get debian/patches/3204-Add-4.20-timespec-compat-fix.patch&lt;/p&gt;
+
+&lt;p&gt;Next you need to patch /var/lib/dkms/zfs/0.7.12/source/include/zpios-ctl.h with that patch&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;run
+dkms autoinstall
+modprobe zfs&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;PROFIT!&lt;/p&gt;
+</description>
+        <pubDate>Tue, 29 Jan 2019 01:35:48 -0600</pubDate>
+        <link>http://0.0.0.0:4000/linux/fedora/zfs/kernel/2019/01/29/2019-zfs-kernel-patch-fedora-kernel.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/linux/fedora/zfs/kernel/2019/01/29/2019-zfs-kernel-patch-fedora-kernel.html</guid>
+        
+        
+        <category>linux</category>
+        
+        <category>fedora</category>
+        
+        <category>zfs</category>
+        
+        <category>kernel</category>
+        
+      </item>
     
       <item>
         <title>Streaming Audio from Linux to OSX with Pulseaudio</title>
@@ -1042,74 +1082,6 @@ to my inbox to a trickle.&lt;/p&gt;
         <category>spam</category>
         
         <category>spamassassin</category>
-        
-      </item>
-    
-      <item>
-        <title>Running postfix 3.0</title>
-        <description>&lt;p&gt;Postfix 3.0 stable was released a few days ago (Feb 8). I run a few personal mailservers and decided it would be good if I were to upgrade the one running on Fedora21 (postfix + mysql + spamass-milter + greylisting), This would be a deviation as I would be compling it from source, and who knows what would break with 3.0! Here is a very brief update to what I did to get it working on Fedora 21:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;yum remove postfix &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt;
-wget ftp://postfix.mirrors.pair.com/postfix-release/official/postfix-3.0.0.tar.gz
-&lt;span class=&quot;nb&quot;&gt;tar&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-xzvf&lt;/span&gt; postfix-3.0.0.tar.gz
-&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;postfix-3.0.0&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;yum &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;mysql-devel openssl-devel libdb-devel libgsasl-devel
-yum groupinstall &lt;span class=&quot;nt&quot;&gt;-y&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Development Tools&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;I put the following in a file so I could keep building it until I got all the right libs/deps&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;make tidy
-&lt;span class=&quot;c&quot;&gt;#This builds postfix with mysql+tls+sasl support&lt;/span&gt;
-make &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; Makefile.init makefiles &lt;span class=&quot;s1&quot;&gt;'CCARGS=-DHAS_MYSQL -I/usr/include/mysql\
--DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\&quot;dovecot\&quot;\
--DUSE_TLS `pkg-config --cflags openssl`'&lt;/span&gt;  &lt;span class=&quot;s1&quot;&gt;'AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm'&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'AUXLIBS=-L/usr/lib64\
--lssl -lcrypto'&lt;/span&gt;  &lt;span class=&quot;nv&quot;&gt;shared&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;dynamicmaps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;yes
-&lt;/span&gt;make
-make &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;For the install part, I used the default paths given.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;/usr/sbin/postfix start&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Do not forget when testing with telnet (if using postscreen) to turn on crlf&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;telnet your.mailserver.com 25
-Trying 127.0.0.1...
-Connected to your.mailserver.com.
-Escape character is &lt;span class=&quot;s1&quot;&gt;'^]'&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
-220 your.mailserver.com ESMTP Postfix
-^]
-telnet&amp;gt; &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;crlf
-Will send carriage returns as telnet &amp;lt;CR&amp;gt;&amp;lt;LF&amp;gt;.&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;For fedora 21, (I do not recall off the top of my head) but these are the packages you need to build with mysql+tls:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;mariadb-devel
-openssl-devel&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;The nice thing too is that when I did a yum -y remove postfix, it left my main.cf intact, just saved it as main.cf.rpmsave. So before starting postfix don’t foget to do:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;cp&lt;/span&gt; /etc/postfix/main.cf.rpmsave /etc/postfix/main.cf&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Also, I left backwards compatability on with postfix, have not tried turning it off. When I do, I will take note of what I had and what needed to be changed.&lt;/p&gt;
-
-&lt;p&gt;No idea how to do comments yet, so email &lt;a href=&quot;mailto:drewski@drewstud.com&quot;&gt;drewski@drewstud.com&lt;/a&gt; with comments/questions&lt;/p&gt;
-</description>
-        <pubDate>Fri, 13 Feb 2015 01:35:48 -0600</pubDate>
-        <link>http://0.0.0.0:4000/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3.0.html</link>
-        <guid isPermaLink="true">http://0.0.0.0:4000/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3.0.html</guid>
-        
-        
-        <category>postfix</category>
-        
-        <category>fedora</category>
-        
-        <category>new</category>
-        
-        <category>telnet</category>
-        
-        <category>postrix3</category>
         
       </item>
     

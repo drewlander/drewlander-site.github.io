@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Archive</title>
+    <title>ZFS kmod Does Not Build On Fedora Kernel 4.20.4-200</title>
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="http://0.0.0.0:4000/archive.html">
+    <link rel="canonical" href="http://0.0.0.0:4000/linux/fedora/zfs/kernel/2019/01/29/2019-zfs-kernel-patch-fedora-kernel.html">
 </head>
 
 
@@ -62,51 +62,33 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Archive</h1>
+    <h1 class="post-title">ZFS kmod Does Not Build On Fedora Kernel 4.20.4-200</h1>
+    <p class="post-meta">Jan 29, 2019</p>
   </header>
 
   <article class="post-content">
-    <h2 id="blog-posts">Blog Posts</h2>
+    <p>After updating my Fedora box, I noticed that the ZFS kernel module was no longer loaded.
+The error (from /var/lib/dkms/zfs/0.7.12/build/make.log) was:</p>
 
-<ul>
-  <li>
-    <p>29 Jan 2019 » <a href="/linux/fedora/zfs/kernel/2019/01/29/2019-zfs-kernel-patch-fedora-kernel.html"> ZFS kmod Does Not Build On Fedora Kernel 4.20.4-200 </a></p>
-  </li>
-  <li>
-    <p>02 Jan 2019 » <a href="/linux/fedora/osx/mac/pulseaudio/2019/01/02/stream-audio-linux-to-osx.html"> Streaming Audio from Linux to OSX with Pulseaudio </a></p>
-  </li>
-  <li>
-    <p>30 Jan 2018 » <a href="/aws/api/gateway/chalice/sqs/celery/python/lambda/linux/2018/01/30/aws-api-lambda-sqs-celery.html"> Setting up AWS API Gateway using Chalice, SQS and Celery </a></p>
-  </li>
-  <li>
-    <p>18 Jan 2016 » <a href="/openbsd/rackspace/public/cloud/linux/2016/01/18/openbsd-on-rackspace-public-cloud.html"> Installing OpenBSD On Rackspace Public Cloud </a></p>
-  </li>
-  <li>
-    <p>18 Jan 2016 » <a href="/chef/ruby/rest/httparty/raw/api/2016/01/18/query-chef-rest-api.html"> Querying Chef REST Api With pure Ruby </a></p>
-  </li>
-  <li>
-    <p>19 Oct 2015 » <a href="/centos/postfix/dovecot/dkim/spamasassain/clamav/postfixadmin/chef/chef-solo/selinux/postgrey/postgrey-milter/mariadb/2015/10/19/centos-mailonacircle.html"> Mailonacircle: Mailinabox(ish) for Centos 7 With Selinux=Enabled </a></p>
-  </li>
-  <li>
-    <p>19 Oct 2015 » <a href="/active/directory/password/export/service/automatic/silent/installation/install/2015/10/19/password-export-service-silent-install.html"> Active Directory Password Export Service Silent Install </a></p>
-  </li>
-  <li>
-    <p>18 Apr 2015 » <a href="/xhyve/freebsd/2015/04/18/xhyve-freebsd.html"> FreeBSD on Xhyve </a></p>
-  </li>
-  <li>
-    <p>18 Apr 2015 » <a href="/centos/systemd/nspawn/systemd-nspawn/centos7/containers/2015/04/18/systemd-nspawn-centos-7.html"> Centos 7 and systemd-nspawn </a></p>
-  </li>
-  <li>
-    <p>13 Feb 2015 » <a href="/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html"> Tuning Spamassassin </a></p>
-  </li>
-  <li>
-    <p>13 Feb 2015 » <a href="/postfix/fedora/new/telnet/postrix3/2015/02/13/running-postfix-3.0.html"> Running postfix 3.0 </a></p>
-  </li>
-  <li>
-    <p>12 Feb 2015 » <a href="/jekyll/update/new/2015/02/12/figuring-this-out.html"> Figuring this jekyll thing out! </a></p>
-  </li>
-</ul>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/var/lib/dkms/zfs/0.7.12/build/include/zpios-ctl.h:186:11: error: implicit declaration of <span class="k">function</span> ‘current_kernel_time’<span class="p">;</span> did you mean ‘current_kernel_time64’? <span class="o">[</span><span class="nt">-Werror</span><span class="o">=</span>implicit-function-declaration]        
+  ts_now <span class="o">=</span> current_kernel_time<span class="o">()</span><span class="p">;</span>                                                                                                                                                                              
+           ^~~~~~~~~~~~~~~~~~~                                                                                                                                                                                 
+           current_kernel_time64                                                                                                                                                                               
+/var/lib/dkms/zfs/0.7.12/build/include/zpios-ctl.h:186:9: error: incompatible types when assigning to <span class="nb">type</span> ‘struct timespec’ from <span class="nb">type</span> ‘int’                                                                   
+  ts_now <span class="o">=</span> current_kernel_time<span class="o">()</span><span class="p">;</span>  </code></pre></figure>
 
+<p>The easiest fix is to:</p>
+
+<p>Download <a href="https://mirrors.edge.kernel.org/ubuntu/pool/main/z/zfs-linux/zfs-linux_0.6.5.11-1ubuntu3.6.debian.tar.xz">zfs-linux_0.6.5.11-1ubuntu3.6.debian.tar.xz </a>
+extract and get debian/patches/3204-Add-4.20-timespec-compat-fix.patch</p>
+
+<p>Next you need to patch /var/lib/dkms/zfs/0.7.12/source/include/zpios-ctl.h with that patch</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">run
+dkms autoinstall
+modprobe zfs</code></pre></figure>
+
+<p>PROFIT!</p>
 
   </article>
 
