@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Drewskiwooskie Blogarooskie</title>
+    <title>Get Pianobar Updates On Touchbar With MTMR</title>
     <meta name="description" content="">
 
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="canonical" href="http://0.0.0.0:4000/">
+    <link rel="canonical" href="http://0.0.0.0:4000/mtmr/pianobar/config/touchbar/2019/01/29/2019-mtmr-with-pianobar.html">
 </head>
 
 
@@ -59,19 +59,29 @@
 
     <div class="page-content">
       <div class="wrapper">
-        <ul>
-  
-    <li><a href="/mtmr/pianobar/config/touchbar/2019/01/29/2019-mtmr-with-pianobar.html">Get Pianobar Updates On Touchbar With MTMR</a></li>
-  
-    <li><a href="/linux/fedora/zfs/kernel/2019/01/29/2019-zfs-kernel-patch-fedora-kernel.html">ZFS kmod Does Not Build On Fedora Kernel 4.20.4-200</a></li>
-  
-    <li><a href="/linux/fedora/osx/mac/pulseaudio/2019/01/02/stream-audio-linux-to-osx.html">Streaming Audio from Linux to OSX with Pulseaudio</a></li>
-  
-    <li><a href="/aws/api/gateway/chalice/sqs/celery/python/lambda/linux/2018/01/30/aws-api-lambda-sqs-celery.html">Setting up AWS API Gateway using Chalice, SQS and Celery</a></li>
-  
-    <li><a href="/openbsd/rackspace/public/cloud/linux/2016/01/18/openbsd-on-rackspace-public-cloud.html">Installing OpenBSD On Rackspace Public Cloud</a></li>
-  
-</ul>
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Get Pianobar Updates On Touchbar With MTMR</h1>
+    <p class="post-meta">Jan 29, 2019</p>
+  </header>
+
+  <article class="post-content">
+    <p>I found <a href="https://github.com/Toxblh/MTMR">MTMR</a> and am really liking it so far. However I also enjoy listening to music with <a href="https://6xq.net/pianobar/">Pianobar</a> but saw there was no love to make the current song playing show in the touchbar. The following is what I did to make it work. Mac OSX 10.14.5 is what I am using, but this can also be made to work on any *nix distro as well.</p>
+
+<p>My repo of files are located <a href="https://github.com/drewlander/configfiles/tree/master/mtmr">here</a></p>
+
+<p>You have to change the config for pianobar to find pianobar-notify.rb. You can do this by adding the following in ~/.config/pianobar/config:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">event_command <span class="o">=</span> /full/path/to/pianobar-notify.rb</code></pre></figure>
+
+<p>Take note that in the MTMR config (items.json) the weather api is redacted, get your own! Also inside pianobar_notify.rb you need to change the full path to where the file goes.</p>
+
+<p>Other than that, it works for me! Horray!</p>
+
+  </article>
+
+</div>
 
       </div>
     </div>

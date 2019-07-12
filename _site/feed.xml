@@ -5,9 +5,38 @@
     <description></description>
     <link>http://0.0.0.0:4000/</link>
     <atom:link href="http://0.0.0.0:4000/feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Tue, 29 Jan 2019 11:38:14 -0600</pubDate>
-    <lastBuildDate>Tue, 29 Jan 2019 11:38:14 -0600</lastBuildDate>
-    <generator>Jekyll v3.8.5</generator>
+    <pubDate>Fri, 12 Jul 2019 12:33:38 -0500</pubDate>
+    <lastBuildDate>Fri, 12 Jul 2019 12:33:38 -0500</lastBuildDate>
+    <generator>Jekyll v3.8.6</generator>
+    
+      <item>
+        <title>Get Pianobar Updates On Touchbar With MTMR</title>
+        <description>&lt;p&gt;I found &lt;a href=&quot;https://github.com/Toxblh/MTMR&quot;&gt;MTMR&lt;/a&gt; and am really liking it so far. However I also enjoy listening to music with &lt;a href=&quot;https://6xq.net/pianobar/&quot;&gt;Pianobar&lt;/a&gt; but saw there was no love to make the current song playing show in the touchbar. The following is what I did to make it work. Mac OSX 10.14.5 is what I am using, but this can also be made to work on any *nix distro as well.&lt;/p&gt;
+
+&lt;p&gt;My repo of files are located &lt;a href=&quot;https://github.com/drewlander/configfiles/tree/master/mtmr&quot;&gt;here&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;You have to change the config for pianobar to find pianobar-notify.rb. You can do this by adding the following in ~/.config/pianobar/config:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;event_command &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; /full/path/to/pianobar-notify.rb&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Take note that in the MTMR config (items.json) the weather api is redacted, get your own! Also inside pianobar_notify.rb you need to change the full path to where the file goes.&lt;/p&gt;
+
+&lt;p&gt;Other than that, it works for me! Horray!&lt;/p&gt;
+</description>
+        <pubDate>Tue, 29 Jan 2019 01:35:48 -0600</pubDate>
+        <link>http://0.0.0.0:4000/mtmr/pianobar/config/touchbar/2019/01/29/2019-mtmr-with-pianobar.html</link>
+        <guid isPermaLink="true">http://0.0.0.0:4000/mtmr/pianobar/config/touchbar/2019/01/29/2019-mtmr-with-pianobar.html</guid>
+        
+        
+        <category>MTMR</category>
+        
+        <category>Pianobar</category>
+        
+        <category>Config</category>
+        
+        <category>Touchbar</category>
+        
+      </item>
     
       <item>
         <title>ZFS kmod Does Not Build On Fedora Kernel 4.20.4-200</title>
@@ -1032,56 +1061,6 @@ drewstud login: &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
         <category>centos7</category>
         
         <category>containers</category>
-        
-      </item>
-    
-      <item>
-        <title>Tuning Spamassassin</title>
-        <description>&lt;p&gt;For those of us who are not large companies where paying another company for spam protection is an option, combatting spam
-can be something both fun, and annoying. Hopefully, for any newbies, here are some things
-to do that can greatly reduce the amount of spam you receive, as well as minimize
-the amount of false positives of mail identified as spam.&lt;/p&gt;
-
-&lt;h3&gt; Have spamassassin learn ham and spam &lt;/h3&gt;
-&lt;p&gt;Many people I have seen just install spamassassin, run sa-update, then complain 
-that they are getting a ton of spam. Spamassassin needs tuned, and tuning is quite
-easy. The quick and easy way is with sa-learn.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;sa-learn &lt;span class=&quot;nt&quot;&gt;--ham&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--username&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;vscan  &lt;span class=&quot;nt&quot;&gt;--nosync&lt;/span&gt; /path/to/maildir/directory/cur
-sa-learn &lt;span class=&quot;nt&quot;&gt;--sync&lt;/span&gt;
-sa-learn &lt;span class=&quot;nt&quot;&gt;--spam&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--nosync&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--username&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;vscan /path/to/maildir/directory/.Junk/cur
-sa-learn &lt;span class=&quot;nt&quot;&gt;--sync&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;You MUST train both ham and spam to be effective.  I have to use the vscan user, as I run amavis. sa-learn will add the bayesian 
-tokens to the datbase of the user executing spamassassin.&lt;/p&gt;
-
-&lt;p&gt;A nice thing to do is to report mail that you have found to be spam. If you have installed the Razmor moudle, it can be reported to 
-Vipul’s Razor. Assuming in a folder that is full of spam:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;i &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ls&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do &lt;/span&gt;spamassassin &lt;span class=&quot;nt&quot;&gt;-r&lt;/span&gt; &amp;lt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;&lt;a href=&quot;http://wiki.apache.org/spamassassin/report_spam.pl&quot;&gt;This&lt;/a&gt; perl script can be run as a cron job. Just point it to a folder that contains only spam.&lt;/p&gt;
-
-&lt;p&gt;Ensuring you are doing sa-update frequently, as well as the above, will help spamassassin properly identify spam/ham. 
-I am personally just tagging the subject, and putting anything with that tag in the subject into a folder that is
-just spam, and running the above commands. This, in addition to running postscreen and a few select rbls, has slowed any spam making it
-to my inbox to a trickle.&lt;/p&gt;
-
-&lt;p&gt;Excellent reference: &lt;a href=&quot;http://www.spamtips.org/p/ultimate-setup-guide.html&quot;&gt;http://www.spamtips.org/p/ultimate-setup-guide.html&lt;/a&gt;&lt;/p&gt;
-
-</description>
-        <pubDate>Fri, 13 Feb 2015 01:35:48 -0600</pubDate>
-        <link>http://0.0.0.0:4000/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html</link>
-        <guid isPermaLink="true">http://0.0.0.0:4000/postfix/fedora/spam/spamassassin/2015/02/13/tuning-spamassassin.html</guid>
-        
-        
-        <category>postfix</category>
-        
-        <category>fedora</category>
-        
-        <category>spam</category>
-        
-        <category>spamassassin</category>
         
       </item>
     
