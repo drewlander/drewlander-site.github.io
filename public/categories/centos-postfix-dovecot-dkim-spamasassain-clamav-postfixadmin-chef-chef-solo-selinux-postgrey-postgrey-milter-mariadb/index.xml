@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>centos postfix dovecot dkim spamasassain clamav postfixadmin chef chef-solo selinux postgrey postgrey-milter mariadb on Drewskiwooskie Blogarooskie</title>
+    <link>http://drewstud.com/categories/centos-postfix-dovecot-dkim-spamasassain-clamav-postfixadmin-chef-chef-solo-selinux-postgrey-postgrey-milter-mariadb/</link>
+    <description>Recent content in centos postfix dovecot dkim spamasassain clamav postfixadmin chef chef-solo selinux postgrey postgrey-milter mariadb on Drewskiwooskie Blogarooskie</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 19 Oct 2015 08:00:48 +0000</lastBuildDate>
+    
+	<atom:link href="http://drewstud.com/categories/centos-postfix-dovecot-dkim-spamasassain-clamav-postfixadmin-chef-chef-solo-selinux-postgrey-postgrey-milter-mariadb/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Mailonacircle: Mailinabox(ish) for Centos 7 With Selinux=Enabled</title>
+      <link>http://drewstud.com/posts/2015-11-03-centos-mailonacircle/</link>
+      <pubDate>Mon, 19 Oct 2015 08:00:48 +0000</pubDate>
+      
+      <guid>http://drewstud.com/posts/2015-11-03-centos-mailonacircle/</guid>
+      <description>Recently I saw the latest mailinabox, and man is it fancy. I looked, and there was nothing like that for centos. I wanted a way to help the lazy people out there setup a centos 7 box with postfixadmin, dovecot, spamasassin, clamav-milter, postgrey-milter, mariadb, and dkim with ease. So in very short time in between down time, I wrote mailonacircle. It uses chef-solo, and the attributes are basic and do not make a lot of sense at first glance, but it is a start.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>MTMR Pianobar Config Touchbar on Drewskiwooskie Blogarooskie</title>
+    <link>http://drewstud.com/categories/mtmr-pianobar-config-touchbar/</link>
+    <description>Recent content in MTMR Pianobar Config Touchbar on Drewskiwooskie Blogarooskie</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 29 Jan 2019 07:35:48 +0000</lastBuildDate>
+    
+	<atom:link href="http://drewstud.com/categories/mtmr-pianobar-config-touchbar/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Get Pianobar Updates On Touchbar With MTMR</title>
+      <link>http://drewstud.com/posts/2019-07-12-2019-mtmr-with-pianobar/</link>
+      <pubDate>Tue, 29 Jan 2019 07:35:48 +0000</pubDate>
+      
+      <guid>http://drewstud.com/posts/2019-07-12-2019-mtmr-with-pianobar/</guid>
+      <description>I found MTMR and am really liking it so far. However I also enjoy listening to music with Pianobar but saw there was no love to make the current song playing show in the touchbar. The following is what I did to make it work. Mac OSX 10.14.5 is what I am using, but this can also be made to work on any *nix distro as well.
+My repo of files are located here</description>
+    </item>
+    
+  </channel>
+</rss>

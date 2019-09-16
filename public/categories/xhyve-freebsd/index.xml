@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>xhyve freebsd on Drewskiwooskie Blogarooskie</title>
+    <link>http://drewstud.com/categories/xhyve-freebsd/</link>
+    <description>Recent content in xhyve freebsd on Drewskiwooskie Blogarooskie</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 18 Apr 2015 08:00:48 +0000</lastBuildDate>
+    
+	<atom:link href="http://drewstud.com/categories/xhyve-freebsd/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>FreeBSD on Xhyve</title>
+      <link>http://drewstud.com/posts/2015-09-04-xhyve-freebsd/</link>
+      <pubDate>Sat, 18 Apr 2015 08:00:48 +0000</pubDate>
+      
+      <guid>http://drewstud.com/posts/2015-09-04-xhyve-freebsd/</guid>
+      <description>xhyve is essentially a port of FreeBSD&amp;rsquo;s bhyve to OSX. The instructions show how to run Ubuntu (which you can dissect and figure out how to boot other linux distro&amp;rsquo;s), but lack any documentation on how to run FreeBSD with it. Here is how to do it: Clone and build the latest xhyve {% highlight bash %} git clone git@github.com:mist64/xhyve.git cd hyve make mkdir freebsd cd freebsd {% endhighlight %}  Download latest FreeBSD virtual machine image {% highlight bash %} wget http://ftp10.</description>
+    </item>
+    
+  </channel>
+</rss>

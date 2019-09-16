@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Drewskiwooskie Blogarooskie  | Mailonacircle: Mailinabox(ish) for Centos 7 With Selinux=Enabled</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.58.2" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="/dist/css/app.d98f2eb6bcd1eaedb7edf166bd16af26.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+
+    <meta property="og:title" content="Mailonacircle: Mailinabox(ish) for Centos 7 With Selinux=Enabled" />
+<meta property="og:description" content="Recently I saw the latest mailinabox, and man is it fancy. I looked, and there was nothing like that for centos. I wanted a way to help the lazy people out there setup a centos 7 box with postfixadmin, dovecot, spamasassin, clamav-milter, postgrey-milter, mariadb, and dkim with ease. So in very short time in between down time, I wrote mailonacircle. It uses chef-solo, and the attributes are basic and do not make a lot of sense at first glance, but it is a start." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://drewstud.com/posts/2015-11-03-centos-mailonacircle/" />
+<meta property="article:published_time" content="2015-10-19T08:00:48+00:00" />
+<meta property="article:modified_time" content="2015-10-19T08:00:48+00:00" />
+<meta itemprop="name" content="Mailonacircle: Mailinabox(ish) for Centos 7 With Selinux=Enabled">
+<meta itemprop="description" content="Recently I saw the latest mailinabox, and man is it fancy. I looked, and there was nothing like that for centos. I wanted a way to help the lazy people out there setup a centos 7 box with postfixadmin, dovecot, spamasassin, clamav-milter, postgrey-milter, mariadb, and dkim with ease. So in very short time in between down time, I wrote mailonacircle. It uses chef-solo, and the attributes are basic and do not make a lot of sense at first glance, but it is a start.">
+
+
+<meta itemprop="datePublished" content="2015-10-19T08:00:48&#43;00:00" />
+<meta itemprop="dateModified" content="2015-10-19T08:00:48&#43;00:00" />
+<meta itemprop="wordCount" content="328">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Mailonacircle: Mailinabox(ish) for Centos 7 With Selinux=Enabled"/>
+<meta name="twitter:description" content="Recently I saw the latest mailinabox, and man is it fancy. I looked, and there was nothing like that for centos. I wanted a way to help the lazy people out there setup a centos 7 box with postfixadmin, dovecot, spamasassin, clamav-milter, postgrey-milter, mariadb, and dkim with ease. So in very short time in between down time, I wrote mailonacircle. It uses chef-solo, and the attributes are basic and do not make a lot of sense at first glance, but it is a start."/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="http://drewstud.com/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Drewskiwooskie Blogarooskie
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+
+    <header class="mt4 w-100">
+      <p class="f6 b helvetica tracked">
+          
+        POSTS
+      </p>
+      <h1 class="f1 athelas mb1">Mailonacircle: Mailinabox(ish) for Centos 7 With Selinux=Enabled</h1>
+      
+      <time class="f6 mv4 dib tracked" datetime="2015-10-19T08:00:48Z">October 19, 2015</time>
+      
+      
+    </header>
+
+    <section class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><p>Recently I saw the latest mailinabox, and man is it fancy. I looked, and there was nothing like that for centos.
+I wanted a way to help the lazy people out there setup a centos 7 box with postfixadmin, dovecot, spamasassin, clamav-milter, postgrey-milter, mariadb, and dkim with ease. So in very short time in between down time, I wrote <a href="https://github.com/drewlander/mailonacircle">mailonacircle</a>. It uses chef-solo, and the attributes are basic and do not make a lot of sense at first glance, but it is a start. With a quick copy/pasta, you can take a fresh centos 7 server and install all of the above, with selinux enabled. By default, there is no default domain (and of course no open relay), do if someone were to just copy/pasta, no damage done. You have to add the domains and mailboxes in postfixadmin. Also smtpauth should work as well.</p>
+
+<p>Reasons I did it this way:</p>
+
+<ul>
+<li>Why Chef? Why not bash/ansible/fancypants thing:
+
+<ul>
+<li>I know Chef very well</li>
+<li>Because I have a hammer, everything looks like a nail</li>
+<li>To be fair, chef solo is perfect for this. Run it once, &ldquo;make this box look like X&rdquo;, and you can remove chef-solo if you wanted.</li>
+</ul></li>
+<li>You did not use any community cookbooks! You should feel bad
+
+<ul>
+<li>I went for simplicity. Why do I need an entire separate cookbook to install mariadb, create a db and create a few users?</li>
+</ul></li>
+<li>Selinux enabled is hard
+
+<ul>
+<li><a href="http://stopdisablingselinux.com/">http://stopdisablingselinux.com/</a></li>
+</ul></li>
+</ul>
+
+<p>This is not as fancy as mailinabox, no fancy web ui, and this assumes at least basic troubleshooting/following directions. What is still left:</p>
+
+<ul>
+<li>Attributes need to make more sense</li>
+<li>There are some hardcoded references to the mail database (specifically called mail in the sql maps for postfix)</li>
+<li>Would love to solve the  postfixadmin password hash manual setup.</li>
+<li>Would like to add more tweaks for configuration.</li>
+<li>Need to NOT chmod 777, EVER</li>
+<li>Why did I enabled ports AND unix sockets for milters to listen on? (127.0.0.1, but STILL)</li>
+<li>Clean up recipes (single responsibility)</li>
+</ul>
+<ul class="pa0">
+  
+</ul>
+<div class="mt6">
+      
+      
+      </div>
+    </section>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="http://drewstud.com/" >
+    &copy; 2019 Drewskiwooskie Blogarooskie
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

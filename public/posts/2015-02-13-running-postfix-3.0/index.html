@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Drewskiwooskie Blogarooskie  | Running postfix 3.0</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.58.2" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="/dist/css/app.d98f2eb6bcd1eaedb7edf166bd16af26.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+
+    <meta property="og:title" content="Running postfix 3.0" />
+<meta property="og:description" content="Postfix 3.0 stable was released a few days ago (Feb 8). I run a few personal mailservers and decided it would be good if I were to upgrade the one running on Fedora21 (postfix &#43; mysql &#43; spamass-milter &#43; greylisting), This would be a deviation as I would be compling it from source, and who knows what would break with 3.0! Here is a very brief update to what I did to get it working on Fedora 21: {% highlight bash %} yum remove postfix -y wget ftp://postfix." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://drewstud.com/posts/2015-02-13-running-postfix-3.0/" />
+<meta property="article:published_time" content="2015-02-13T07:35:48+00:00" />
+<meta property="article:modified_time" content="2015-02-13T07:35:48+00:00" />
+<meta itemprop="name" content="Running postfix 3.0">
+<meta itemprop="description" content="Postfix 3.0 stable was released a few days ago (Feb 8). I run a few personal mailservers and decided it would be good if I were to upgrade the one running on Fedora21 (postfix &#43; mysql &#43; spamass-milter &#43; greylisting), This would be a deviation as I would be compling it from source, and who knows what would break with 3.0! Here is a very brief update to what I did to get it working on Fedora 21: {% highlight bash %} yum remove postfix -y wget ftp://postfix.">
+
+
+<meta itemprop="datePublished" content="2015-02-13T07:35:48&#43;00:00" />
+<meta itemprop="dateModified" content="2015-02-13T07:35:48&#43;00:00" />
+<meta itemprop="wordCount" content="359">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Running postfix 3.0"/>
+<meta name="twitter:description" content="Postfix 3.0 stable was released a few days ago (Feb 8). I run a few personal mailservers and decided it would be good if I were to upgrade the one running on Fedora21 (postfix &#43; mysql &#43; spamass-milter &#43; greylisting), This would be a deviation as I would be compling it from source, and who knows what would break with 3.0! Here is a very brief update to what I did to get it working on Fedora 21: {% highlight bash %} yum remove postfix -y wget ftp://postfix."/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="http://drewstud.com/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Drewskiwooskie Blogarooskie
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+
+    <header class="mt4 w-100">
+      <p class="f6 b helvetica tracked">
+          
+        POSTS
+      </p>
+      <h1 class="f1 athelas mb1">Running postfix 3.0</h1>
+      
+      <time class="f6 mv4 dib tracked" datetime="2015-02-13T07:35:48Z">February 13, 2015</time>
+      
+      
+    </header>
+
+    <section class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l"><p>Postfix 3.0 stable was released a few days ago (Feb 8). I run a few personal mailservers and decided it would be good if I were to upgrade the one running on Fedora21 (postfix + mysql + spamass-milter + greylisting), This would be a deviation as I would be compling it from source, and who knows what would break with 3.0! Here is a very brief update to what I did to get it working on Fedora 21:
+{% highlight bash %}
+yum remove postfix -y
+wget <a href="ftp://postfix.mirrors.pair.com/postfix-release/official/postfix-3.0.0.tar.gz">ftp://postfix.mirrors.pair.com/postfix-release/official/postfix-3.0.0.tar.gz</a>
+tar -xzvf postfix-3.0.0.tar.gz
+cd postfix-3.0.0
+{% endhighlight %}
+{% highlight bash %}
+yum -y install mysql-devel openssl-devel libdb-devel libgsasl-devel
+yum groupinstall -y &ldquo;Development Tools&rdquo;
+{% endhighlight %}
+I put the following in a file so I could keep building it until I got all the right libs/deps
+{% highlight bash %}
+make tidy
+#This builds postfix with mysql+tls+sasl support
+make -f Makefile.init makefiles &lsquo;CCARGS=-DHAS_MYSQL -I/usr/include/mysql<br />
+-DUSE_SASL_AUTH -DDEF_SERVER_SASL_TYPE=\&ldquo;dovecot\&rdquo;<br />
+-DUSE_TLS <code>pkg-config --cflags openssl</code>&rsquo;  &lsquo;AUXLIBS_MYSQL=-L/usr/lib64/mysql -lmysqlclient -lz -lm&rsquo; &lsquo;AUXLIBS=-L/usr/lib64<br />
+-lssl -lcrypto&rsquo;  shared=yes dynamicmaps=yes
+make
+make install
+{% endhighlight %}
+For the install part, I used the default paths given.
+{% highlight bash %}
+/usr/sbin/postfix start
+{% endhighlight %}</p>
+
+<p>Do not forget when testing with telnet (if using postscreen) to turn on crlf
+{% highlight bash %}
+telnet your.mailserver.com 25
+Trying 127.0.0.1&hellip;
+Connected to your.mailserver.com.
+Escape character is &lsquo;^]&rsquo;.
+220 your.mailserver.com ESMTP Postfix
+^]
+telnet&gt; set crlf
+Will send carriage returns as telnet <CR><LF>.
+{% endhighlight %}</p>
+
+<p>For fedora 21, (I do not recall off the top of my head) but these are the packages you need to build with mysql+tls:
+{% highlight bash %}
+mariadb-devel
+openssl-devel
+{% endhighlight %}
+The nice thing too is that when I did a yum -y remove postfix, it left my main.cf intact, just saved it as main.cf.rpmsave. So before starting postfix don&rsquo;t foget to do:
+{% highlight bash %}
+cp /etc/postfix/main.cf.rpmsave /etc/postfix/main.cf
+{% endhighlight %}
+Also, I left backwards compatability on with postfix, have not tried turning it off. When I do, I will take note of what I had and what needed to be changed.</p>
+
+<p>No idea how to do comments yet, so email <a href="mailto:drewski@drewstud.com">drewski@drewstud.com</a> with comments/questions</p>
+<ul class="pa0">
+  
+</ul>
+<div class="mt6">
+      
+      
+      </div>
+    </section>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="http://drewstud.com/" >
+    &copy; 2019 Drewskiwooskie Blogarooskie
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

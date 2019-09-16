@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>postfix fedora spam spamassassin on Drewskiwooskie Blogarooskie</title>
+    <link>http://drewstud.com/categories/postfix-fedora-spam-spamassassin/</link>
+    <description>Recent content in postfix fedora spam spamassassin on Drewskiwooskie Blogarooskie</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 13 Feb 2015 07:35:48 +0000</lastBuildDate>
+    
+	<atom:link href="http://drewstud.com/categories/postfix-fedora-spam-spamassassin/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Tuning Spamassassin</title>
+      <link>http://drewstud.com/posts/2015-02-26-tuning-spamassassin/</link>
+      <pubDate>Fri, 13 Feb 2015 07:35:48 +0000</pubDate>
+      
+      <guid>http://drewstud.com/posts/2015-02-26-tuning-spamassassin/</guid>
+      <description>For those of us who are not large companies where paying another company for spam protection is an option, combatting spam can be something both fun, and annoying. Hopefully, for any newbies, here are some things to do that can greatly reduce the amount of spam you receive, as well as minimize the amount of false positives of mail identified as spam.
+ Have spamassassin learn ham and spam  Many people I have seen just install spamassassin, run sa-update, then complain that they are getting a ton of spam.</description>
+    </item>
+    
+  </channel>
+</rss>

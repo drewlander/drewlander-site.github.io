@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>linux fedora zfs kernel on Drewskiwooskie Blogarooskie</title>
+    <link>http://drewstud.com/categories/linux-fedora-zfs-kernel/</link>
+    <description>Recent content in linux fedora zfs kernel on Drewskiwooskie Blogarooskie</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 29 Jan 2019 07:35:48 +0000</lastBuildDate>
+    
+	<atom:link href="http://drewstud.com/categories/linux-fedora-zfs-kernel/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ZFS kmod Does Not Build On Fedora Kernel 4.20.4-200</title>
+      <link>http://drewstud.com/posts/2019-01-29-2019-zfs-kernel-patch-fedora-kernel/</link>
+      <pubDate>Tue, 29 Jan 2019 07:35:48 +0000</pubDate>
+      
+      <guid>http://drewstud.com/posts/2019-01-29-2019-zfs-kernel-patch-fedora-kernel/</guid>
+      <description>After updating my Fedora box, I noticed that the ZFS kernel module was no longer loaded. The error (from /var/lib/dkms/zfs/0.7.12/build/make.log) was:
+{% highlight bash %} /var/lib/dkms/zfs/0.7.12/build/include/zpios-ctl.h:186:11: error: implicit declaration of function ‘current_kernel_time’; did you mean ‘current_kernel_time64’? [-Werror=implicit-function-declaration]
+ts_now = current_kernel_time();
+^~~~~~~~~~~~~~~~~~~
+current_kernel_time64
+/var/lib/dkms/zfs/0.7.12/build/include/zpios-ctl.h:186:9: error: incompatible types when assigning to type ‘struct timespec’ from type ‘int’
+ts_now = current_kernel_time();
+{% endhighlight %}
+The easiest fix is to:
+Download zfs-linux_0.6.5.11-1ubuntu3.6.debian.tar.xz  extract and get debian/patches/3204-Add-4.</description>
+    </item>
+    
+  </channel>
+</rss>
