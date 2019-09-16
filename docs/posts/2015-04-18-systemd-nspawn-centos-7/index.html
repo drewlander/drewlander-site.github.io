@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Drewskiwooskie Blogarooskie  | Centos 7 and systemd-nspawn</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.58.2" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="/dist/css/app.d98f2eb6bcd1eaedb7edf166bd16af26.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+
+    <meta property="og:title" content="Centos 7 and systemd-nspawn" />
+<meta property="og:description" content="With systemd, comes systemd-nspawn. (I will not talk about love/hate of systemd, not in this post at least. Let&rsquo;s just say if you start out saying you are writing an init system, why does your init system takeover acpi?). Anyway, part of the systemd monstrosity is something called nspawn. In short, its a &ldquo;more powerful&rdquo; chroot, but still should not be relied upon soley for security (think defense in depth people!" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://drewstud.com/posts/2015-04-18-systemd-nspawn-centos-7/" />
+<meta property="article:published_time" content="2015-04-18T08:00:48+00:00" />
+<meta property="article:modified_time" content="2015-04-18T08:00:48+00:00" />
+<meta itemprop="name" content="Centos 7 and systemd-nspawn">
+<meta itemprop="description" content="With systemd, comes systemd-nspawn. (I will not talk about love/hate of systemd, not in this post at least. Let&rsquo;s just say if you start out saying you are writing an init system, why does your init system takeover acpi?). Anyway, part of the systemd monstrosity is something called nspawn. In short, its a &ldquo;more powerful&rdquo; chroot, but still should not be relied upon soley for security (think defense in depth people!">
+
+
+<meta itemprop="datePublished" content="2015-04-18T08:00:48&#43;00:00" />
+<meta itemprop="dateModified" content="2015-04-18T08:00:48&#43;00:00" />
+<meta itemprop="wordCount" content="606">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Centos 7 and systemd-nspawn"/>
+<meta name="twitter:description" content="With systemd, comes systemd-nspawn. (I will not talk about love/hate of systemd, not in this post at least. Let&rsquo;s just say if you start out saying you are writing an init system, why does your init system takeover acpi?). Anyway, part of the systemd monstrosity is something called nspawn. In short, its a &ldquo;more powerful&rdquo; chroot, but still should not be relied upon soley for security (think defense in depth people!"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="http://drewstud.com/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Drewskiwooskie Blogarooskie
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+
+    <header class="mt4 w-100">
+      <p class="f6 b helvetica tracked">
+          
+        POSTS
+      </p>
+      <h1 class="f1 athelas mb1">Centos 7 and systemd-nspawn</h1>
+      
+      <time class="f6 mv4 dib tracked" datetime="2015-04-18T08:00:48Z">April 18, 2015</time>
+      
+      
+    </header>
+
+    <section class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l">
+
+<p>With systemd, comes systemd-nspawn. (I will not talk about love/hate of systemd, not in this post at least. Let&rsquo;s just say
+if you start out saying you are writing an init system, why does your init system takeover acpi?). Anyway, part of the systemd
+monstrosity is something called nspawn. In short, its a &ldquo;more powerful&rdquo; chroot, but still should not be relied upon soley for security
+(think defense in depth people!). Why would you use this over lxc? If you just want to run something in a chroot, its great for it.
+If you need a full container, lxc is probably a better choice. Because I like to try new things, I chose systemd-nspawn to run certain
+applications (http, mysql, minecraft). I also did not see many tutorials specifically targeting centos 7 which seems to be using
+and older verson of systemd-nspawn/machinectl so some features are missing in those tools.</p>
+
+<p><h3> Create a basic centos 7 bootstrap</h3>
+{% highlight bash %}
+yum -y &ndash;releasever=7 &ndash;nogpg &ndash;installroot=/srv/yaystuff install systemd passwd yum fedora-release vim-minimal
+{% endhighlight %}
+This will install a basic bootstrap centos 7 environment
+<h3> Reset the password in the container </h3>
+If you are a good person, you are running selinux in enforcing mode. However there is a known bug in centos 7 that will not
+let you change the password if you &ldquo;boot&rdquo; your container. So currently, you can be fancy and make modules, or be only a slightly
+bad person and disable selinux, change the password, re-enable (things work fine after this point with selinux enabled)
+{% highlight bash %}
+setenforce 0
+systemd-nspawn -D /srv/yaystuff
+passwd
+exit
+setenforce 1
+{% endhighlight %}
+<h3> Boot your container and install your fancypants stuff</h3>
+{% highlight bash %}
+systemd-nspawn -D /srv/yaystuff/ -b
+{% endhighlight %}
+This will drop you into a shell, where you can yum install/configure to your hearts desire.</p>
+
+<p>Note: This will also by default make your &ldquo;container&rdquo; listen on your network interfaces. So if you have port 80
+open in your firewall, and have httpd started and listening in your container (but not on your host), it will be as if you
+are serving httpd on your host.</p>
+
+<p>When you are done installing fancy stuff, I just issue
+{% highlight bash %}
+halt
+{% endhighlight %}
+And it stops the container and takes you out of your chroot.</p>
+
+<p>You can also bind paths outside of your container into the container&rsquo;s chroot
+{% highlight bash %}
+systemd-nspawn -D /srv/yaystuff/ -b &ndash;bind=/path/on/host:/path/in/container
+{% endhighlight %}</p>
+
+<p><h3>Start your container with systemd </h3>
+edit the following file: /etc/systemd/system/yaystuff.service
+<pre>
+[Unit]
+Description=yaystuff container</p>
+
+<p>[Service]
+ExecStart=/usr/bin/systemd-nspawn -jbD /srv/yaystuff/ -bind=/path/on/host:/path/in/container
+KillMode=process
+</pre>
+Then reload systemd and start the container</p>
+
+<p>{% highlight bash %}
+systemd start yaystuff.service
+{% endhighlight %}</p>
+
+<p>Now the version of machinectl on centos 7.0 does not have a login feature. So you have to use nsenter. To use nsenter, you have to get the pid of your container.
+That is logged in /var/log/messages (or if you started your container from the cli)</p>
+
+<p>{% highlight bash %}
+grep -A 1 &ldquo;Spawning namespace container on /srv/yaystuff&rdquo; /var/log/messages
+{% endhighlight %}</p>
+
+<p>Grab the pid there and then execute:
+{% highlight bash %}
+nsenter -m -u -i -n -p -t $PID
+{% endhighlight %}
+To leave just type exit.</p>
+
+<p>Excellent reference: <a href="http://0pointer.de/blog/projects/changing-roots.html">http://0pointer.de/blog/projects/changing-roots.html</a></p>
+
+<h2 id="update">UPDATE:</h2>
+
+<p>Redhat 7.2 (CentOS Linux release 7.2.1511) has a newer version of machinectl that has login. No need to use nsenter anymore.</p>
+
+<p>{% highlight bash %}
+machinectl list
+MACHINE                          CONTAINER SERVICE<br />
+php-fpm                          container nspawn<br />
+mysql                            container nspawn<br />
+webstuff                         container nspawn</p>
+
+<p>machinectl login mysql
+Connected to container mysql. Press ^] three times within 1s to exit session.</p>
+
+<p>Debian GNU/Linux stretch/sid drewstud.com pts/0</p>
+
+<p>drewstud login:
+{% endhighlight %}</p>
+<ul class="pa0">
+  
+</ul>
+<div class="mt6">
+      
+      
+      </div>
+    </section>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="http://drewstud.com/" >
+    &copy; 2019 Drewskiwooskie Blogarooskie
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>

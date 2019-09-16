@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>centos systemd nspawn systemd-nspawn centos7 containers on Drewskiwooskie Blogarooskie</title>
+    <link>http://drewstud.com/categories/centos-systemd-nspawn-systemd-nspawn-centos7-containers/</link>
+    <description>Recent content in centos systemd nspawn systemd-nspawn centos7 containers on Drewskiwooskie Blogarooskie</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 18 Apr 2015 08:00:48 +0000</lastBuildDate>
+    
+	<atom:link href="http://drewstud.com/categories/centos-systemd-nspawn-systemd-nspawn-centos7-containers/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Centos 7 and systemd-nspawn</title>
+      <link>http://drewstud.com/posts/2015-04-18-systemd-nspawn-centos-7/</link>
+      <pubDate>Sat, 18 Apr 2015 08:00:48 +0000</pubDate>
+      
+      <guid>http://drewstud.com/posts/2015-04-18-systemd-nspawn-centos-7/</guid>
+      <description>With systemd, comes systemd-nspawn. (I will not talk about love/hate of systemd, not in this post at least. Let&amp;rsquo;s just say if you start out saying you are writing an init system, why does your init system takeover acpi?). Anyway, part of the systemd monstrosity is something called nspawn. In short, its a &amp;ldquo;more powerful&amp;rdquo; chroot, but still should not be relied upon soley for security (think defense in depth people!</description>
+    </item>
+    
+  </channel>
+</rss>

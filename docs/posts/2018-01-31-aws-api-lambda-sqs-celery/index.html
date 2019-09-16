@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>Drewskiwooskie Blogarooskie  | Setting up AWS API Gateway using Chalice, SQS and Celery</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.58.2" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    
+    
+      <link href="/dist/css/app.d98f2eb6bcd1eaedb7edf166bd16af26.css" rel="stylesheet">
+    
+
+    
+
+    
+      
+    
+
+    
+
+    <meta property="og:title" content="Setting up AWS API Gateway using Chalice, SQS and Celery" />
+<meta property="og:description" content="End Goal To have an api that sends SQS messages to a queue to be processed by workers.
+Flow api request -&gt; AWS API Gateaway -&gt; SQS -&gt; Celery
+Why? Why manage an api for yourself when chalice and AWS can handle it quite easily for you. Yes the cloud is someone else&rsquo;s computer, but I don&rsquo;t want to be woken up because a server is down. I would rather be notified because a behemouth like Amazon is down." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://drewstud.com/posts/2018-01-31-aws-api-lambda-sqs-celery/" />
+<meta property="article:published_time" content="2018-01-31T05:35:48+00:00" />
+<meta property="article:modified_time" content="2018-01-31T05:35:48+00:00" />
+<meta itemprop="name" content="Setting up AWS API Gateway using Chalice, SQS and Celery">
+<meta itemprop="description" content="End Goal To have an api that sends SQS messages to a queue to be processed by workers.
+Flow api request -&gt; AWS API Gateaway -&gt; SQS -&gt; Celery
+Why? Why manage an api for yourself when chalice and AWS can handle it quite easily for you. Yes the cloud is someone else&rsquo;s computer, but I don&rsquo;t want to be woken up because a server is down. I would rather be notified because a behemouth like Amazon is down.">
+
+
+<meta itemprop="datePublished" content="2018-01-31T05:35:48&#43;00:00" />
+<meta itemprop="dateModified" content="2018-01-31T05:35:48&#43;00:00" />
+<meta itemprop="wordCount" content="1470">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Setting up AWS API Gateway using Chalice, SQS and Celery"/>
+<meta name="twitter:description" content="End Goal To have an api that sends SQS messages to a queue to be processed by workers.
+Flow api request -&gt; AWS API Gateaway -&gt; SQS -&gt; Celery
+Why? Why manage an api for yourself when chalice and AWS can handle it quite easily for you. Yes the cloud is someone else&rsquo;s computer, but I don&rsquo;t want to be woken up because a server is down. I would rather be notified because a behemouth like Amazon is down."/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+   
+  
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="http://drewstud.com/" class="f3 fw2 hover-white no-underline white-90 dib">
+      Drewskiwooskie Blogarooskie
+    </a>
+    <div class="flex-l items-center">
+      
+
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+
+    <main class="pb7" role="main">
+      
+  
+  <article class="flex-l flex-wrap justify-between mw8 center ph3">
+
+    <header class="mt4 w-100">
+      <p class="f6 b helvetica tracked">
+          
+        POSTS
+      </p>
+      <h1 class="f1 athelas mb1">Setting up AWS API Gateway using Chalice, SQS and Celery</h1>
+      
+      <time class="f6 mv4 dib tracked" datetime="2018-01-31T05:35:48Z">January 31, 2018</time>
+      
+      
+    </header>
+
+    <section class="nested-copy-line-height lh-copy serif f4 nested-links nested-img mid-gray pr4-l w-two-thirds-l">
+
+<h3 id="end-goal">End Goal</h3>
+
+<p>To have an api that sends SQS messages to a queue to be processed by workers.</p>
+
+<h3 id="flow">Flow</h3>
+
+<p>api request -&gt; AWS API Gateaway -&gt; SQS -&gt; Celery</p>
+
+<h4 id="why">Why?</h4>
+
+<p>Why manage an api for yourself when chalice and AWS can handle it quite easily for you. Yes the cloud is someone else&rsquo;s computer, but I don&rsquo;t want to be woken up because a server is down. I would rather be notified because a behemouth like Amazon is down.</p>
+
+<h3 id="setup">Setup</h3>
+
+<h4 id="create-chalice-appliction">Create Chalice Appliction</h4>
+
+<p>I use python3 for everything. 3 &gt; 2 so python3 is obviously better. We will also use the default project names. Keeps it simple. A lot taken from their README
+* Create virtualenv for program
+{% highlight bash %}
+python3.6 -m venv chalice-demo
+cd chalice-demo
+. ./bin/actiavate
+pip install chalice==1.1.0
+pip install celery==4.1.0
+{% endhighlight %}</p>
+
+<p>Since Chalice is for Amazon, you need to setup your Amazon credentials</p>
+
+<p>{% highlight bash %}
+$ mkdir ~/.aws
+$ cat &gt;&gt; ~/.aws/config
+[default]
+aws_access_key_id=YOUR_ACCESS_KEY_HERE
+aws_secret_access_key=YOUR_SECRET_ACCESS_KEY
+region=YOUR_REGION (such as us-west-2, us-west-1, etc)
+{% endhighlight %}</p>
+
+<p>{% highlight bash %}
+chalice new-project chalice_project
+cd chalice_project
+{% endhighlight %}</p>
+
+<p>Then create app.py inside the chalice_project directory with the following contents:
+{% highlight python %}
+from chalice import Chalice, IAMAuthorizer
+import json
+import boto3
+import base64
+from celery import Celery</p>
+
+<p>broker_url=&lsquo;sqs://<user api key id>:<user api secret key>@&rsquo;
+app = Chalice(app_name=&lsquo;chalice_project&rsquo;)</p>
+
+<p>authorizer = IAMAuthorizer()</p>
+
+<p>@app.route(&lsquo;/&rsquo;, api_key_required=True, authorizer=authorizer)
+def index():
+    return {&lsquo;hello&rsquo;: &lsquo;world&rsquo;}</p>
+
+<p>@app.route(&lsquo;/sendtosns&rsquo;, api_key_required=True, authorizer=authorizer)
+def sendto_sqs():</p>
+
+<pre><code>sqs = boto3.resource('sqs')
+# assuming you are using a fifo queue
+queue_url = 'https://sqs.us-east-1.amazonaws.com/&lt;aws account id&gt;/&lt;queue name&gt;.fifo'
+
+try:
+    celery=Celery(broker=broker_url)
+    celery.conf.task_default_queue ='&lt;queue name&gt;.fifo'
+    celery.conf.update(CELERY_ACCEPT_CONTENT=[&quot;json&quot;],
+            CELERY_TASK_SERIALIZER=&quot;json&quot;,
+            CELERY_RESULT_SERIALIZER=&quot;json&quot;,
+            CELERY_DEFAULT_QUEUE='environment_queue.fifo')
+
+    celery.send_task(&quot;tasks.add&quot;, (2,2))
+except Exception as e:
+    print(e)
+    return '{&quot;error occurred&quot;:&quot;check cloudwatch logs&quot;}'
+
+return '{&quot;message_status&quot;:&quot;success&quot;}'
+</code></pre>
+
+<p>{% endhighlight %}</p>
+
+<p>Also add the following to requirements.txt</p>
+
+<p>{% highlight bash %}
+celery==4.1.0
+{% endhighlight %}</p>
+
+<p>Notice a few things here. We need to create a SQS queue, and we need our aws credentials. For testing that is fine to leave those in there, but I would HIGHLY recommend using AWS KMS Keys for the data. This is just to get things working.</p>
+
+<p>You can also use your AWS &ldquo;master&rdquo; account, but below I will show the polcies that I used to make it work.</p>
+
+<p>Go to your aws dashboard (or use cloudformation) and make your SQS FIFO queue.</p>
+
+<p>Now it is time to deploy your chalice app!</p>
+
+<p>{% highlight bash %}
+chalice deploy
+{% endhighlight %}</p>
+
+<p>Any credentials or permissions you are missing for that user are made clear here. If you are using your master account, it should work just fine. It is creating the lambda, creating permissions, and making the api gateay. Really, it is setting up the API Gateway -&gt; Lambda function method execution for you. Anything I do not have to do manually is a win.</p>
+
+<p>In addition, it uploads any depencies you installed via pip, amazing!</p>
+
+<p>Something else to notice as well, we added &lsquo;api_key_required=True, authorizer=authorizer&rsquo; to the constructor, so yes, we will need to auth, TWICE! Why not, security rocks. You can remove those from the constructor and have it be unauthenticated, but whats the fun in that!</p>
+
+<h4 id="adding-api-key-to-endpoint">Adding api key to endpoint</h4>
+
+<p>You can probably do this with cloudformation or aws api, but for this tutorial we will use the console</p>
+
+<ul>
+<li>In your AWS Console (web interface) go to Services and choose API Gateway</li>
+<li>Go to API Keys</li>
+<li>Under actions, select &ldquo;Create API Key&rdquo;</li>
+<li>Give it a name. I let is autogenerate but if I am very paranoid I will generate my own.</li>
+<li>Hit Save</li>
+<li>Go to  &ldquo;Usage Plans&rdquo;</li>
+<li>Hit Create</li>
+<li>Give it a name (Basic is fine for this demo)
+
+<ul>
+<li>Usage plans let you rate limit, throttle, etc&hellip; based on api key</li>
+</ul></li>
+<li>After hitting save, select your newly created Usage Plan</li>
+<li>Select &ldquo;Add API Stage&rdquo;
+
+<ul>
+<li>An API Stage lets you deploy code to different &ldquo;Stages&rdquo;. You could have a stage for dev, pre-prod, prod, hamster, etc..</li>
+<li>If you wanted a new stage, its as easy as &ldquo;chalice deploy &ndash;stage penguin&rdquo;</li>
+</ul></li>
+<li>Under api you should have your api selected</li>
+<li>Under stage, if its default you can enter in api, or choose whatever stage you want it to be.</li>
+<li>Hit that tiny checkmark beside it</li>
+</ul>
+
+<p>There, now you have an api key to hit this API. We also chose IAM authentication. That means we have to use AWS Signature Version 4 singing. Don&rsquo;t worry, smart people already made a python module for this.
+{% highlight bash %}
+pip install aws-requests-auth==0.4.1
+pip install requests==2.18.4
+{% endhighlight %}
+And then to test the api, we have this snazzy little python program. Let&rsquo;s name is snazzy.py</p>
+
+<p>{% highlight python %}
+import requests
+from aws_requests_auth.aws_auth import AWSRequestsAuth</p>
+
+<p>auth = AWSRequestsAuth(aws_access_key=&rsquo;<your aws access key id>&rsquo;,
+                       aws_secret_access_key=&rsquo;<your aws access secrey key>,
+                       aws_host=&lsquo;123456abcde.execute-api.us-east-1.amazonaws.com&rsquo;,
+                       aws_region=&lsquo;us-east-1&rsquo;,
+                       aws_service=&lsquo;execute-api&rsquo;)
+headers = {&lsquo;x-api-key&rsquo;: &lsquo;<api key you generated>&rsquo;}
+response = requests.get(&lsquo;<a href="https://123456abcde.execute-api.us-east-1.amazonaws.com/api/sendtosqs'">https://123456abcde.execute-api.us-east-1.amazonaws.com/api/sendtosqs'</a>,
+                          auth=auth, headers=headers)
+print(response.content)</p>
+
+<p>{% endhighlight %}
+You can get the api path by going to your api, selecting stages, your stage, then the url at the top is how to get to your url (also the end of chalice deploy tells you what it is as well)</p>
+
+<p>Now, if things are good, we are almost done. We need to enable cloudwatch logs for the api.</p>
+
+<p><a href="https://aws.amazon.com/premiumsupport/knowledge-center/api-gateway-cloudwatch-logs/"> AWS Documentation</a>. This is where I got my info.</p>
+
+<ul>
+<li>Under services, select IAM</li>
+<li>Select Roles</li>
+<li>You should see something like chalice_project-dev, select that</li>
+<li>Under trust relationship, select &ldquo;Edit trust relationship&rdquo;</li>
+<li>It should look something like this:
+{% highlight json %}
+{
+&ldquo;Version&rdquo;: &ldquo;2012-10-17&rdquo;,
+&ldquo;Statement&rdquo;: [
+{
+  &ldquo;Sid&rdquo;: &ldquo;&rdquo;,
+  &ldquo;Effect&rdquo;: &ldquo;Allow&rdquo;,
+  &ldquo;Principal&rdquo;: {
+    &ldquo;Service&rdquo;: &ldquo;lambda.amazonaws.com&rdquo;
+  },
+  &ldquo;Action&rdquo;: &ldquo;sts:AssumeRole&rdquo;
+},
+{
+  &ldquo;Sid&rdquo;: &ldquo;&rdquo;,
+  &ldquo;Effect&rdquo;: &ldquo;Allow&rdquo;,
+  &ldquo;Principal&rdquo;: {
+    &ldquo;Service&rdquo;: &ldquo;apigateway.amazonaws.com&rdquo;
+  },
+  &ldquo;Action&rdquo;: &ldquo;sts:AssumeRole&rdquo;
+}
+]
+}
+{% endhighlight %}</li>
+<li>Select &ldquo;Update Trust Policy&rdquo;</li>
+<li>Back at the policy summary for chalie_project-dev, select &ldquo;Attach Policy&rdquo;</li>
+<li>Choose &ldquo;AmazonAPIGatewayPushToCloudWatchLogs&rdquo; and select &ldquo;Attach Policy&rdquo;</li>
+<li>Back at the policy summary page, copy the Role ARN</li>
+<li>Go to services and select API Gateay</li>
+<li>Select your API</li>
+<li>Select Stages</li>
+<li>Select your stage (api is default)</li>
+<li>Under logs select &ldquo;Enable Cloudwatch logs&rdquo; and hit save changes</li>
+<li>Under settings on the left hand side, under &ldquo;Cloudwatch log role ARN&rdquo;, paste the ARN you copied earlier and hit save
+If all goes well, there should be no errors, and now your application is logging to cloudwatch!</li>
+</ul>
+
+<p>Now you can test your api, and look at cloudwatch to see if there are any issues. Just run:
+{% highlight bash %}
+python3.6 snazzy.py
+{% endhighlight %}
+It should hit the sendtosqs endpoint and put a message on the queue! WOW!</p>
+
+<h3 id="celery-setup">Celery setup</h3>
+
+<ul>
+<li>Create another virtual environment somewhere
+{% highlight bash %}
+python3.6 -m venv workers
+cd workers
+. ./bin/activate
+pip install celery==4.1.0
+export PYCURL_SSL_LIBRARY=nss
+pip install pycurl &ndash;no-cache-dir
+pip install pycurl
+{% endhighlight %}</li>
+<li>NOTE: there may be funny things with pycurl. This is the worst part of everything. YMMV, may have to use google to figure out why it wont install. Again, so stupid.</li>
+<li>Create a file called tasks.py
+{% highlight python %}
+from celery import Celery
+import uuid
+import time
+import random
+broker_url=&lsquo;sqs://<aws key id>:<aws secret key>@&rsquo;</li>
+</ul>
+
+<p>broker_transport_options = {&lsquo;queue_name_prefix&rsquo;: &lsquo;<queue_name>.fifo&rsquo;}
+CELERY_TASK_SERIALIZER = &lsquo;json&rsquo;
+CELERY_RESULT_SERIALIZER = &lsquo;json&rsquo;
+app = Celery(&lsquo;tasks&rsquo;, broker=broker_url, broker_transport_options=broker_transport_options )
+app.conf.task_default_queue =&rsquo;<queue_name>.fifo&rsquo;
+app.conf.update(CELERY_ACCEPT_CONTENT=[&ldquo;json&rdquo;],
+                CELERY_TASK_SERIALIZER=&ldquo;json&rdquo;,
+                CELERY_RESULT_SERIALIZER=&ldquo;json&rdquo;,
+                CELERY_DEFAULT_QUEUE=&rsquo;<queue_name>.fifo&rsquo;)</p>
+
+<p>@app.task(serializer=&lsquo;json&rsquo;)
+def add(message,duo):
+    my_uuid = uuid.uuid4()
+    sleep_time = random.randint(1,10)
+    print(&lsquo;I got a task, and my uuid is: {} and I am sleeping {}&lsquo;.format(my_uuid, sleep_time))
+    time.sleep(sleep_time)
+    print(&ldquo;My uuuid is %s and I am done sleeping&rdquo; % my_uuid)
+    print(message)
+    return message</p>
+
+<p>{% endhighlight %}</p>
+
+<p>The point here is not to do actual work, its to show that it is reading SQS messages, and executing child tasks that are run in paralell.</p>
+
+<p>Run the program with:
+{% highlight bash %}
+celery -A tasks worker &ndash;loglevel=info &ndash;concurrency=10
+{% endhighlight %}</p>
+
+<p>If thinks work right, you should see things coming on in!</p>
+
+<h3 id="permissions">Permissions</h3>
+
+<p>If you do everything with an account that has full access to everything, there should be zero issues. However, that is NOT how you want to do it in production.
+* Here is the policy json that worked for me to have a user I create have access to deploy, update and delete a chalice app.
+{% highlight json %}
+{
+    &ldquo;Version&rdquo;: &ldquo;2012-10-17&rdquo;,
+    &ldquo;Statement&rdquo;: [
+        {
+            &ldquo;Sid&rdquo;: &ldquo;VisualEditor0&rdquo;,
+            &ldquo;Effect&rdquo;: &ldquo;Allow&rdquo;,
+            &ldquo;Action&rdquo;: [
+                &ldquo;lambda:CreateFunction&rdquo;,
+                &ldquo;apigateway:DELETE&rdquo;,
+                &ldquo;lambda:ListTags&rdquo;,
+                &ldquo;apigateway:PUT&rdquo;,
+                &ldquo;lambda:UpdateFunctionConfiguration&rdquo;,
+                &ldquo;apigateway:POST&rdquo;,
+                &ldquo;sqs:<em>&rdquo;,
+                &ldquo;apigateway:GET&rdquo;
+            ],
+            &ldquo;Resource&rdquo;: &ldquo;</em>&ldquo;
+        },
+        {
+            &ldquo;Sid&rdquo;: &ldquo;VisualEditor1&rdquo;,
+            &ldquo;Effect&rdquo;: &ldquo;Allow&rdquo;,
+            &ldquo;Action&rdquo;: [
+                &ldquo;iam:GetRole&rdquo;,
+                &ldquo;lambda:GetFunction&rdquo;,
+                &ldquo;iam:CreateRole&rdquo;,
+                &ldquo;iam:DeleteRole&rdquo;,
+                &ldquo;lambda:GetFunctionConfiguration&rdquo;,
+                &ldquo;iam:PutRolePolicy&rdquo;,
+                &ldquo;lambda:UpdateFunctionCode&rdquo;,
+                &ldquo;iam:PassRole&rdquo;,
+                &ldquo;lambda:AddPermission&rdquo;,
+                &ldquo;iam:DeleteRolePolicy&rdquo;,
+                &ldquo;lambda:DeleteFunction&rdquo;,
+                &ldquo;iam:ListRolePolicies&rdquo;,
+                &ldquo;lambda:GetPolicy&rdquo;
+            ],
+            &ldquo;Resource&rdquo;: [
+                &ldquo;arn:aws:iam::<account id>:role/chalice_project-dev&rdquo;,
+                &ldquo;arn:aws:lambda:us-east-1:<account id>:function:chalice_project-dev&rdquo;
+            ]
+        }
+    ]
+}
+{% endhighlight %}</p>
+
+<h4 id="api-user">API user</h4>
+
+<p>The nice thing if you are using IAM authentication, you can make a user that can only hit certain endpoints. (There are OAUTH and custom authenticators you can use with API Gateway)
+* I created a user, then a group to contain that user. I then created then attached the following policy:
+{% highlight json %}
+{
+    &ldquo;Version&rdquo;: &ldquo;2012-10-17&rdquo;,
+    &ldquo;Statement&rdquo;: [
+        {
+            &ldquo;Sid&rdquo;: &ldquo;VisualEditor0&rdquo;,
+            &ldquo;Effect&rdquo;: &ldquo;Allow&rdquo;,
+            &ldquo;Action&rdquo;: &ldquo;execute-api:Invoke&rdquo;,
+            &ldquo;Resource&rdquo;: &ldquo;arn:aws:execute-api:us-east-1:<account id>:12345abcde/api/GET/sendtosqs&rdquo;
+        }
+    ]
+}
+{% endhighlight %}
+* This user could only hit the sendtosns endpoint using Get.</p>
+<ul class="pa0">
+  
+</ul>
+<div class="mt6">
+      
+      
+      </div>
+    </section>
+
+    <aside class="w-30-l mt6-l">
+
+
+
+
+</aside>
+
+  </article>
+
+    </main>
+    <footer class="bg-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="http://drewstud.com/" >
+    &copy; 2019 Drewskiwooskie Blogarooskie
+  </a>
+    <div>
+
+
+
+
+
+
+
+
+
+
+</div>
+  </div>
+</footer>
+
+    
+
+  <script src="/dist/js/app.3fc0f988d21662902933.js"></script>
+
+
+  </body>
+</html>
