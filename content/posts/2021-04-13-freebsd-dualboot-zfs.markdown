@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Dual boot Windows 10 and FreeBSD with ZFS"
-date:   2020-04-13 06:00:00
+date:   2020-04-13 06:01:00
 categories: FreeBSD Windows ZFS
 ---
 
@@ -13,7 +13,7 @@ But can you watch DRM enabled content like Netflix? You bet you can! Download an
 
 In addition, I have bhyve with an Ubuntu 20.04 guest. I am using the tool vm to manage virtual machines. I will make that another post.
 
-All in all, I can say I am quite pleased. My laptop has the dual graphics, and if I previously did have it using the Nvidia graphics card, but I just have it using the built in Intel graphics and it works great. Most of the games I like are pre-2010 so the card handles it great!
+All in all, I can say I am quite pleased. My laptop has the dual graphics, and I previously did have it using the Nvidia graphics card, but I just have it using the built in Intel graphics and it works great. Most of the games I like are pre-2010 so the card handles it great!
 
 Hardware of note:
 
